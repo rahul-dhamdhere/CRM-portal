@@ -7,7 +7,7 @@
 }
 
 .profile-card {
-    margin: 0 ;
+    margin: 0 30%;
     width: 40%;
     height: 200px;
     border: 1px solid rgba(128, 128, 128, 0.242);
@@ -47,6 +47,27 @@
 .detail-value {
     color: white;
 }
+.youtube-style-graph {
+    background: #1a1f33;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+  }
+  
+  /* Custom tooltip styling */
+  .chartjs-tooltip {
+    background: rgba(0, 0, 0, 0.7) !important;
+    border-radius: 4px !important;
+    color: white !important;
+    padding: 8px 12px !important;
+    border: none !important;
+  }
+  
+  /* Point hover effect */
+  .chartjs-render-monitor {
+    transition: all 0.3s ease;
+  }
 
 /* Responsive Styles */
 @media (max-width: 768px) {
