@@ -1,0 +1,114 @@
+* {
+  background-color: transparent;
+  margin: 0;
+  width: 100%;
+  text-decoration: none;
+  
+}
+
+#block1 {
+  border: 1px solid rgba(128, 128, 128, 0.242);
+  text-align: center;
+  padding: 0;
+  width: 15vw;
+  height: 100%;
+  background-color: #29304c;
+  color: white;
+  transition: width 0.3s ease;
+  position: relative; /* For positioning the arrow */
+}
+
+#block1.collapsed {
+  width: 4vw;
+}
+
+#blocks {
+  color: white;
+  display: flex;
+  text-align: center;
+  align-items: flex-start;
+  border: 1px solid rgba(128, 128, 128, 0.242);
+  height: 7vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+#logo-nav {
+  height: 35px;
+  width: 35px;
+  padding-left: 1vw;
+  padding-top: 1vh;
+}
+
+#image {
+  padding-left: 1.25vw;
+  padding-top: 2vh;
+  height: 25px;
+  width: 25px;
+}
+
+#blocks h3 {
+  padding-left: 1.5vw;
+  padding-top: 2vh;
+  font-size: 20px;
+  white-space: nowrap;
+}
+
+/* Arrow styling */
+.collapse-arrow {
+  position: absolute;
+  bottom: 20px; /* Position at the bottom */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Center horizontally */
+  cursor: pointer;
+  font-size: 20px;
+  color: white;
+  transition: transform 0.3s ease;
+}
+
+.collapsed .collapse-arrow {
+  transform: translateX(-50%) rotate(180deg); /* Rotate arrow when collapsed */
+}
+
+/* Responsive styles */
+/* Add these media queries at the bottom */
+@media (max-width: 768px) {
+  #block1 {
+    width: 60px;
+    z-index: 1000; /* Ensure sidebar stays on top */
+  }
+
+  #block1.collapsed {
+    width: 200px;
+  }
+
+  #blocks h3 {
+    display: none;
+  }
+
+  #block1.collapsed #blocks h3 {
+    display: block;
+    font-size: 16px; /* Smaller text for mobile */
+  }
+
+  .collapse-arrow {
+    bottom: 10px;
+    font-size: 16px;
+  }
+
+  #image {
+    padding-left: 5px;
+    height: 20px;
+    width: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  #block1 {
+    width: 50px;
+  }
+  
+  #block1.collapsed {
+    width: 180px;
+  }
+}

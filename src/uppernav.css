@@ -1,0 +1,78 @@
+    #uppernav {
+        width: 100%;
+        border: 1px solid rgba(128, 128, 128, 0.242);
+        display: flex;
+        background-color: #29304c; /* Dark background for the upper nav */
+        color: white;
+        height: 7vh; /* Fixed height for the upper nav */
+        display: flex;
+        align-items: center;
+    
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow */
+        justify-content: space-between; /* Better spacing */
+        padding: 0px; /* Reduced padding */
+    }
+
+    
+    #logo-nav1 {
+        height: 35px;
+        width: 35px;
+        padding-left: 0.5vw;
+
+    }
+    #logo-nav2 {
+        height: 30px;
+        width: 30px;
+       
+    }
+    #uppernav h3 {
+    padding-left: 0.25vw;
+    padding-top: 1vh;
+    font-size: 18px;
+    white-space: nowrap;
+    }
+    #left, #right {
+        display: flex;
+        align-items: center;
+        width: 3.25%; /* Remove fixed width */
+        float: none; /* Remove float */
+      }
+    /* Mobile styles */
+@media (max-width: 768px) {
+    #uppernav {
+      height: 50px;
+      padding: 0 10px;
+    }
+  
+    #uppernav h3 {
+      font-size: 16px;
+      display: none; /* Hide text on mobile */
+    }
+  
+    #logo-nav1 {
+      height: 30px;
+      width: 30px;
+    }
+  
+    #logo-nav2 {
+      height: 25px;
+      width: 25px;
+    }
+    #left, #right{
+        width: 10%;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    #uppernav {
+      padding: 0 5px;
+    }
+    
+    #logo-nav1 {
+      height: 25px;
+      width: 25px;
+    }
+    #left, #right{
+        width: 12%;
+    }
+  }

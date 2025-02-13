@@ -1,0 +1,16 @@
+.profile-img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.label {
+   margin-bottom: 0px; 
+   font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  margin:2px;
+
+}
