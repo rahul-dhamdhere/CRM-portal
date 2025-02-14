@@ -185,8 +185,10 @@ li {
 .dropdown-toggle {
   background: none;
   border: none;
-  font-size: 20px;
+  font-size: 18px;
   cursor: pointer;
+  z-index: 1050;
+  position: relative;
 }
 
 .dropdown-menu {
@@ -195,20 +197,23 @@ li {
   border: 1px solid #ddd;
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
+  z-index: 1100; 
+  position: absolute;
+}  
+  
 
 .dropdown-menu .dropdown-item {
   display: flex;
   align-items: center;
   padding: 8px 12px;
   font-size: 14px;
-  color: #333;
+  color: #fdfdfd;
   transition: background 0.2s ease-in-out;
 }
 
 .dropdown-menu .dropdown-item:hover {
   background-color: #f1f1f1;
-  color: #000;
+  color: #4eeb7b;
 }
 
 .dropdown-item svg {

@@ -16,6 +16,12 @@ const AddLeadContact = ({ isOpen, onClose }) => {
               <label>Salutation</label>
               <select>
                 <option>--</option>
+                <option>Mr</option>
+                <option>Mrs</option>
+                <option>Miss</option>
+                <option>Dr.</option>
+                <option>Sir</option>
+                <option>Madam</option>
               </select>
             </div>
             <div className="form-group">
@@ -50,6 +56,12 @@ const AddLeadContact = ({ isOpen, onClose }) => {
               <label>Deal Stages *</label>
               <select>
                 <option>Generated</option>
+                <option>Qualified</option>
+                <option>Initial Contact</option>
+                <option>Schedule Appointment</option>
+                <option>Proposal Sent</option>
+                <option>Loss</option>
+                <option>in progess</option>
               </select>
             </div>
             <div className="form-group">
@@ -100,6 +112,8 @@ const AddLeadContact = ({ isOpen, onClose }) => {
                 <label>Country</label>
                 <select>
                   <option>--</option>
+                  <option>India</option>
+                  <option>USA</option>
                 </select>
               </div>
               <div className="form-group">
