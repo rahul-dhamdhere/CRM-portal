@@ -19,6 +19,7 @@ const Client = () => {
     <div className={`filter-panel ${showFilters ? "open" : ""}`}>
       <div className="d-flex justify-content-between align-items-center">
         <strong>Filters</strong>
+        <div><br></br></div>
         <button className="btn-close" onClick={() => setShowFilters(false)}>×</button>
       </div>
       {renderFilterOption("Date Filter On", ["Created", "Updated on"])}
