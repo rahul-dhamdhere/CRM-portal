@@ -1,22 +1,22 @@
 import React, { useState } from "react";
-import "./AddClient.css";
+import "./AddClientContact.css";
 import logo from "./assets/stoicsalamander_logo.jpeg";
 
-const AddClient = () => {
+const AddClientContact = ({ isOpen, onClose }) => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({});
-  const [showPopup, setShowPopup] = useState(false);
 
-  const handleNext = () => setStep(step + 1);
-  const handleBack = () => setStep(step - 1);
+  const handleNext = () => setStep((prevStep) => prevStep + 1);
+  const handleBack = () => setStep((prevStep) => prevStep - 1);
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   return (
-    <div className="form-container">
+    <div className={`form-container ${isOpen ? "show" : ""}`}>
+      <button className="btn-close" onClick={onClose}>X</button>
       {step === 1 && (
-        <div className="page1">
+        <div className="page">
           <h2>Add Client - Account Details</h2>
           <form>
             <div className="form-group">
@@ -49,14 +49,14 @@ const AddClient = () => {
             </div>
             <div className="form-group">
               <button type="button" onClick={handleNext} className="btn btn-primary">Next</button>
-              <button type="button" className="btn btn-cancel">Cancel</button>
+              <button type="button" className="btn btn-cancel" onClick={onClose}>Cancel</button>
             </div>
           </form>
         </div>
       )}
 
       {step === 2 && (
-        <div className="page2">
+        <div className="page">
           <h2>Add Client - Company Details</h2>
           <form>
             <div className="form-group">
@@ -88,7 +88,7 @@ const AddClient = () => {
       )}
 
       {step === 3 && (
-        <div className="page3">
+        <div className="page">
           <h2>Add Client - Additional Details</h2>
           <form>
             <div className="form-group">
@@ -106,11 +106,10 @@ const AddClient = () => {
             <div className="form-group">
               <label>Company Logo</label>
               <input type="file" name="companyLogo" onChange={handleChange} />
-              {/* <img id="logo-nav1" src={logo} alt="logo" /> */}
             </div>
             <div className="form-group">
               <button type="button" onClick={handleBack} className="btn btn-secondary">Back</button>
-              <button type="button" className="btn btn-primary" onClick={() => setShowPopup(true)}>Save</button>
+              <button type="button" className="btn btn-primary">Save</button>
             </div>
           </form>
         </div>
@@ -119,4 +118,4 @@ const AddClient = () => {
   );
 };
 
-export default AddClient;
+export default AddClientContact;

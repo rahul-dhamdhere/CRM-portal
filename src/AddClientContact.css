@@ -1,0 +1,59 @@
+.form-container {
+  position: fixed;
+  top: 0;
+  right: -100%; /* Initially hidden */
+  width: 400px;
+  height: 100vh;
+  background: #fff;
+  box-shadow: -5px 0 10px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  transition: right 0.4s ease-in-out;
+  overflow-y: auto;
+  z-index: 1000;
+  background: #1a1f33;
+  color: white;
+  
+}
+
+.form-container.show {
+  right: 0; /* Slide in */
+}
+
+.page {
+  margin-top: 20px;
+}
+
+.btn-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.btn-cancel {
+  background: #dc3545;
+  color: white;
+  margin-left: 10px;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+}

@@ -119,9 +119,9 @@ const Client = () => {
       <br />
       <div className="d-flex justify-content-between align-items-center">
         <span>
-          <button className="btn btn-primary" onClick={() => setIsPopupOpen(true)}>
-            <FaPlus /> Add Client Contact
-          </button>
+        <button className="btn btn-primary" onClick={() => setIsPopupOpen(true)}>
+        <FaPlus /> Add Client Contact
+      </button>
           <button className="btn btn-outline-secondary import-btn">
             ⬆ Import
           </button>
