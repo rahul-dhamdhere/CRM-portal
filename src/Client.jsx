@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import "./Client.css";
 import { FaSearch, FaFilter, FaPlus, FaEllipsisV } from "react-icons/fa";
+import AddClientContact from "./AddClientContact";
+
 
 const Client = () => {
   const [showFilters, setShowFilters] = useState(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
 
   const clients = [
@@ -116,7 +119,7 @@ const Client = () => {
       <br />
       <div className="d-flex justify-content-between align-items-center">
         <span>
-          <button className="btn btn-primary">
+          <button className="btn btn-primary" onClick={() => setIsPopupOpen(true)}>
             <FaPlus /> Add Client Contact
           </button>
           <button className="btn btn-outline-secondary import-btn">
@@ -126,6 +129,7 @@ const Client = () => {
       </div>
       <br />
       {renderTable()}
+      <AddClientContact isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)} />
     </div>
   );
 };
