@@ -1,0 +1,82 @@
+/* src/components/ProfileSettings/ProfileSettings.css */
+.profile-settings-container {
+    display: flex;
+    min-height: 100vh; /* Ensure full viewport height */
+    background-color: #29304c;
+    width: 100%;
+  }
+  
+  .sidebar {
+    width: 200px;
+    background-color: #29304c;
+    color : white;
+    padding: 20px;
+  }
+  
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebar li a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: white;
+  }
+  
+  .content {
+    flex: 1;
+    padding: 20px;
+  }
+  
+  .profile-header {
+    display: flex;
+    justify-content: space-between; /* Align items to start and end */
+    align-items: center; /* Vertically center items */
+    margin-bottom: 20px;
+  }
+  
+  .search-box {
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Vertically center the input and button */
+    border: 1px solid #ccc; /* Add a border */
+    border-radius: 4px; /* Round the corners */
+    padding: 4px; /* Add some padding */
+    overflow: hidden; /* Hide any overflowing content */
+  }
+  
+  .profile-picture {
+    margin-bottom: 20px;
+  }
+  
+  .profile-picture img {
+    max-width: 150px; /* Adjust as needed */
+    height: auto;
+    border-radius: 50%; /* Make it circular */
+  }
+  
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  
+  input,
+  select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+  }
+  
+  button {
+    background-color: #007bff; /* Example blue button */
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    cursor: pointer;
+  }
