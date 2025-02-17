@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import "./Auth.css";
-import emailIcon from "../assets/email.png";
-import passwordIcon from "../assets/password.png";
+import emailIcon from "./assets/email.png";
+import passwordIcon from "./assets/password.png";
 
-const Login = () => {
+const Login = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -36,7 +36,7 @@ const Login = () => {
     }
 
     if (isValid) {
-      alert("Login Successful!");
+      onLoginSuccess();
     }
   };
 
@@ -79,8 +79,6 @@ const Login = () => {
           Login
         </div>
       </div>
-
-      
     </div>
   );
 };

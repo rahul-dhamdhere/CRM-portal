@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Login from "./Login.jsx";
 import Signup from "./Signup.jsx";
 import ForgotPassword from "./ForgotPassword.jsx";
@@ -6,10 +7,15 @@ import "./Auth.css";
 
 const Auth = () => {
   const [currentForm, setCurrentForm] = useState("login");
+  const navigate = useNavigate();
+
+  const handleLoginSuccess = () => {
+    navigate("/");
+  };
 
   return (
     <div className="container">
-      {currentForm === "login" && <Login />}
+      {currentForm === "login" && <Login onLoginSuccess={handleLoginSuccess} />}
       {currentForm === "signup" && <Signup />}
       {currentForm === "forgotPassword" && <ForgotPassword />}
 

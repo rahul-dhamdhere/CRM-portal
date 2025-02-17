@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import "./Auth.css";
-import emailIcon from "../assets/email.png";
-import userIcon from "../assets/pro.png";
-import passwordIcon from "../assets/password.png";
+import emailIcon from "./assets/email.png";
+import userIcon from "./assets/pro.png";
+import passwordIcon from "./assets/password.png";
 
 const Signup = ({ setCurrentForm }) => {
   const [name, setName] = useState("");
