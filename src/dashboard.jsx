@@ -73,10 +73,10 @@ function Dashboard() {
       </div>
     <div style={{display : 'flex', justifyContent: 'space-between'}}>
       {/* Add graphs here */}
-      <div className="youtube-style-graph" style={{ width: '40%', height: '300px',margin : '5%'}}>
+      <div className="youtube-style-graph" style={{ width: '35%', height: '225px',margin : '5%'}}>
         <LineGraph />
       </div>
-      <div className="youtube-style-graph" style={{ width: '40%', height: '300px',margin : '5%'}}>
+      <div className="youtube-style-graph" style={{ width: '35%', height: '225px',margin : '5%'}}>
         <LineGraph />
       </div>
       </div>

@@ -1,82 +1,186 @@
 /* src/components/ProfileSettings/ProfileSettings.css */
 .profile-settings-container {
-    display: flex;
-    min-height: 100vh; /* Ensure full viewport height */
-    background-color: #29304c;
+  display: flex;
+  height: calc(100vh - 8vh); /* Adjust height to account for UpperNav */
+  overflow: hidden;
+  background-color: #1a1f33; /* Consistent background color */
+  width: 100%;
+}
+
+.profile-settings-container .sidebar {
+  width: 250px;
+  background-color: #1a1f33; /* Consistent background color */
+  color: white;
+  padding: 20px;
+  border: 1px solid rgba(128, 128, 128, 0.242);
+}
+
+.profile-settings-container .sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.profile-settings-container .sidebar li a {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: white;
+}
+
+.profile-settings-container .content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.profile-settings-container .profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  color: white;
+}
+
+.profile-settings-container .search-box {
+  display: flex; /* Use flexbox for alignment */
+  align-items: center; /* Vertically center the input and button */
+  border: 1px solid #ccc; /* Add a border */
+  border-radius: 4px; /* Round the corners */
+  padding: 4px; /* Add some padding */
+  overflow: hidden; /* Hide any overflowing content */
+}
+
+.profile-settings-container .search-box input {
+  padding: 5px;
+  font-size: 16px;
+}
+
+.profile-settings-container .profile-picture {
+  margin-bottom: 20px;
+}
+
+.profile-settings-container .profile-picture img {
+  max-width: 150px; /* Adjust as needed */
+  height: auto;
+  border-radius: 50%; /* Make it circular */
+}
+
+.profile-settings-container .form-group {
+  margin-bottom: 20px;
+}
+
+.profile-settings-container .form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: white;
+}
+
+.profile-settings-container .form-group input,
+.profile-settings-container .form-group select {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
+
+.profile-settings-container button {
+  /* Example blue button */
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  cursor: pointer;
+}
+
+.profile-settings-container button[type="submit"] {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.profile-settings-container button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+  .profile-settings-container {
+    flex-direction: column;
+    height: calc(100vh - 8vh); /* Adjust height to account for UpperNav */
+    overflow-y: auto; /* Ensure scrolling */
+  }
+
+  .profile-settings-container .sidebar {
     width: 100%;
-  }
-  
-  .sidebar {
-    width: 200px;
-    background-color: #29304c;
-    color : white;
-    padding: 20px;
-  }
-  
-  .sidebar ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .sidebar li a {
-    display: block;
     padding: 10px;
-    text-decoration: none;
-    color: white;
   }
-  
-  .content {
-    flex: 1;
-    padding: 20px;
+
+  .profile-settings-container .content {
+    padding: 10px;
   }
-  
-  .profile-header {
-    display: flex;
-    justify-content: space-between; /* Align items to start and end */
-    align-items: center; /* Vertically center items */
-    margin-bottom: 20px;
+
+  .profile-settings-container .profile-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
-  
-  .search-box {
-    display: flex; /* Use flexbox for alignment */
-    align-items: center; /* Vertically center the input and button */
-    border: 1px solid #ccc; /* Add a border */
-    border-radius: 4px; /* Round the corners */
-    padding: 4px; /* Add some padding */
-    overflow: hidden; /* Hide any overflowing content */
-  }
-  
-  .profile-picture {
-    margin-bottom: 20px;
-  }
-  
-  .profile-picture img {
-    max-width: 150px; /* Adjust as needed */
-    height: auto;
-    border-radius: 50%; /* Make it circular */
-  }
-  
-  .form-group {
-    margin-bottom: 1rem;
-  }
-  
-  label {
-    display: block;
-    margin-bottom: 0.5rem;
-  }
-  
-  input,
-  select {
+
+  .profile-settings-container .search-box {
     width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    box-sizing: border-box; /* Include padding and border in element's total width and height */
+    margin-top: 10px;
   }
-  
-  button {
-    background-color: #007bff; /* Example blue button */
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border: none;
-    cursor: pointer;
+
+  .profile-settings-container .profile-picture img {
+    max-width: 100px;
   }
+
+  .profile-settings-container .form-group input,
+  .profile-settings-container .form-group select {
+    padding: 8px;
+  }
+
+  .profile-settings-container button[type="submit"] {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-settings-container {
+    flex-direction: column;
+    height: calc(100vh - 8vh); /* Adjust height to account for UpperNav */
+    overflow-y: auto; /* Ensure scrolling */
+  }
+
+  .profile-settings-container .sidebar {
+    width: 100%;
+    padding: 5px;
+  }
+
+  .profile-settings-container .content {
+    padding: 5px;
+  }
+
+  .profile-settings-container .profile-header {
+    align-items: center;
+  }
+
+  .profile-settings-container .search-box {
+    padding: 2px;
+  }
+
+  .profile-settings-container .profile-picture img {
+    max-width: 80px;
+  }
+
+  .profile-settings-container .form-group input,
+  .profile-settings-container .form-group select {
+    padding: 6px;
+  }
+
+  .profile-settings-container button[type="submit"] {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}

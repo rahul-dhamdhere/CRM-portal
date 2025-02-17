@@ -1,11 +1,12 @@
 // src/components/ProfileSettings/ProfileSettings.jsx
-import  { useState } from 'react';
+import React, { useState } from 'react';
 import './ProfileSettings.css';
+import pic from './assets/watermark2.png';
 
 const ProfileSettings = () => {
   const [profileData, setProfileData] = useState({
-    name: 'Sakshi Hole',
-    email: 'sakshihole1102@gmail.com',
+    name: 'Rahul Dhamdhere',
+    email: 'rahulrdhamdhere@gmail.com',
     receiveNotifications: true,
     enableGoogleCalendar: false,
     country: 'India',
@@ -26,8 +27,8 @@ const ProfileSettings = () => {
   };
 
   return (
-    <div className="profile-settings-container" style={{overflow: 'scroll'}}>
-        <aside className="sidebar">
+    <div className="profile-settings-container">
+      <aside className="sidebar">
         <h2>Profile Settings</h2>
         <ul>
           <li><a href="#">Profile Settings</a></li>
@@ -45,7 +46,7 @@ const ProfileSettings = () => {
         <form onSubmit={handleSubmit}>
           <div className="profile-picture">
             {/* Replace with your image upload component */}
-            <img src="path/to/profile/image.jpg" alt="Profile Picture" />
+            <img src={pic} alt="Profile Picture" />
           </div>
 
           <div className="form-group">
@@ -97,7 +98,6 @@ const ProfileSettings = () => {
           <button type="submit">Save</button>
         </form>
       </main>
-     
     </div>
   );
 };

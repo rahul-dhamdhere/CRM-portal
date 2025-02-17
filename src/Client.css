@@ -1,10 +1,9 @@
 /* General Styling */
 .container2 {
-  background-color: #1a1f33;
+  background-color: #1a1f33; /* Consistent background color */
   padding: 20px;
-  /* border-radius: 8px; */
   width: 100%;
-  color:white;
+  color: white;
 }
 
 .label {
@@ -19,14 +18,13 @@ input, select {
   border: 1px solid #ccc;
   border-radius: 4px;
   color: white;
-  background: #1a1f33;
+  background: #1a1f33; /* Consistent background color */
 }
 
 button {
-  /* background-color: transparent; */
   border: oldlace;
   border-radius: 4px;
-  background: #1a1f33;
+  background: #1a1f33; /* Consistent background color */
   color: white;
 }
 
@@ -60,8 +58,6 @@ button {
 }
 
 /* Buttons */
-
-
 .btn-primary:hover {
   background-color: #c82333;
 }
@@ -69,25 +65,23 @@ button {
 /* Table */
 .table {
   width: 100%;
-  background: #1a1f33;
+  background: #1a1f33; /* Consistent background color */
   border-radius: 5px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  color:white;
+  color: white;
 }
 
 .table-light {
-  background: #1a1f33;
+  background: #1a1f33; /* Consistent background color */
 }
 
 th, td {
   padding: 12px;
   text-align: left;
-  border:2px solid white;
 }
 
 th {
   font-weight: bold;
-  
 }
 
 /* Pagination */
@@ -121,23 +115,19 @@ th {
   right: -400px; /* Initially hidden */
   width: 280px;
   height: 100vh;
-  background: white;
+  background: #1a1f33; /* Consistent background color */
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
   transition: right 0.3s ease-in-out;
   padding: 20px;
   z-index: 1050;
-  background: #1a1f33;
-  color: white;
 }
 
 .filter-panel.open {
   right: 0; /* Slide in when active */
-  background: #1a1f33;
-  color: white;
 }
 
 .filter-panel .btn-close {
-  background: #1a1f33;
+  background: #1a1f33; /* Consistent background color */
   color: white;
   border: none;
   font-size: 18px;
@@ -160,7 +150,7 @@ th {
 }
 
 .import-btn {
-  margin-left:10px;
+  margin-left: 10px;
   align-items: center;
   background: rgba(226, 220, 220, 0.763);
   border: 1px solid #ccc;
@@ -199,10 +189,9 @@ li {
   border: 1px solid #ddd;
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  z-index: 1100; 
+  z-index: 1100;
   position: absolute;
-}  
-  
+}
 
 .dropdown-menu .dropdown-item {
   display: flex;
@@ -223,11 +212,50 @@ li {
   font-size: 16px;
 }
 
-
-
 .btn-close {
   font-size: 16px;
   padding: 4px;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+  .container2 {
+    padding: 10px;
+  }
+
+  .search-filter-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .table {
+    font-size: 14px;
+  }
+
+  .pagination-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container2 {
+    padding: 5px;
+  }
+
+  .search-filter-container {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .table {
+    font-size: 12px;
+  }
+
+  .pagination-container {
+    flex-direction: column;
+    gap: 5px;
+  }
 }
 
 

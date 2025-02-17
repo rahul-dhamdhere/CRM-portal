@@ -1,9 +1,7 @@
 * {
   background-color: transparent;
   margin: 0;
-  /* width: 100%; */
   text-decoration: none;
-  
 }
 
 #block1 {
@@ -11,11 +9,14 @@
   text-align: center;
   padding: 0;
   width: 15vw;
-  height: 100%;
+  height: 100vh; /* Fixed height for the sidebar */
   background-color: #29304c;
   color: white;
   transition: width 0.3s ease;
-  position: relative; /* For positioning the arrow */
+  position: fixed; /* Fixed position for the sidebar */
+  top: 0;
+  left: 0;
+  z-index: 1000; /* Ensure sidebar stays on top */
 }
 
 #block1.collapsed {
@@ -71,11 +72,9 @@
 }
 
 /* Responsive styles */
-/* Add these media queries at the bottom */
 @media (max-width: 768px) {
   #block1 {
     width: 60px;
-    z-index: 1000; /* Ensure sidebar stays on top */
   }
 
   #block1.collapsed {
@@ -107,7 +106,7 @@
   #block1 {
     width: 50px;
   }
-  
+
   #block1.collapsed {
     width: 180px;
   }
