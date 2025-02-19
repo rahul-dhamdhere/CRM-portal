@@ -1,24 +1,23 @@
 import React, { useState } from "react";
 import "./Auth.css";
-import emailIcon from "./assets/email.png";
-import userIcon from "./assets/pro.png";
-import passwordIcon from "./assets/password.png";
 
 const Signup = ({ setCurrentForm }) => {
+  const [companyName, setCompanyName] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rePassword, setRePassword] = useState("");
 
+  const [companyNameError, setCompanyNameError] = useState("");
   const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [rePasswordError, setRePasswordError] = useState("");
-  const [message, setMessage] = useState("");
 
-  // Validate Email
+  
   const validateEmail = (email) => {
-    if (!email.includes("@") || !email.includes(".")) {
+    if (!email.includes("@") || !email.includes(".")) 
+    {
       setEmailError("Enter a valid email address.");
     } else {
       setEmailError("");
@@ -28,25 +27,32 @@ const Signup = ({ setCurrentForm }) => {
   const register = () => {
     let isValid = true;
 
+    if (companyName.trim() === "") {
+      setCompanyNameError("The Company Name field is required.");
+      isValid = false;
+    } else {
+      setCompanyNameError("");
+    }
+
     if (name.trim() === "") {
-      setNameError("Name is required.");
+      setNameError("The Name field is required.");
       isValid = false;
     } else {
       setNameError("");
     }
 
     if (email.trim() === "") {
-      setEmailError("Email is required.");
+      setEmailError("The Email field is required.");
       isValid = false;
     } else {
       validateEmail(email);
     }
 
     if (password.trim() === "") {
-      setPasswordError("Password is required.");
+      setPasswordError("The Password field is required.");
       isValid = false;
-    } else if (password.length < 6) {
-      setPasswordError("Password must be at least 6 characters.");
+    } else if (password.length < 8) {
+      setPasswordError("Password must be at least 8 characters.");
       isValid = false;
     } else {
       setPasswordError("");
@@ -63,7 +69,7 @@ const Signup = ({ setCurrentForm }) => {
     }
 
     if (isValid) {
-      alert('Successfully signed up!')
+      alert("Successfully signed up!");
     }
   };
 
@@ -75,22 +81,36 @@ const Signup = ({ setCurrentForm }) => {
       </div>
 
       <div className="inputs">
+        <label>Company Name</label>
         <div className="input">
-          <img src={userIcon} alt="User" />
           <input
             type="text"
-            placeholder="Name"
+            className={companyNameError ? "error-border" : ""}
+            placeholder="e.g Acme Corporation"
+            value={companyName}
+            onChange={(e) => setCompanyName(e.target.value)}
+          />
+        </div>
+        {companyNameError && <p className="error">{companyNameError}</p>}
+
+        <label>Your Name</label>
+        <div className="input">
+          <input
+            type="text"
+            className={nameError ? "error-border" : ""}
+            placeholder="e.g John Doe"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
         </div>
         {nameError && <p className="error">{nameError}</p>}
 
+        <label>Email Address</label>
         <div className="input">
-          <img src={emailIcon} alt="Email" />
           <input
             type="email"
-            placeholder="Email"
+            className={emailError ? "error-border" : ""}
+            placeholder="e.g johndoe@gmail.com"
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
@@ -100,22 +120,24 @@ const Signup = ({ setCurrentForm }) => {
         </div>
         {emailError && <p className="error">{emailError}</p>}
 
+        <label>Password</label>
         <div className="input">
-          <img src={passwordIcon} alt="Password" />
           <input
             type="password"
-            placeholder="Password"
+            className={passwordError ? "error-border" : ""}
+            placeholder="Must have at least 8 characters"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
         {passwordError && <p className="error">{passwordError}</p>}
 
+        <label>Re-Enter Password</label>
         <div className="input">
-          <img src={passwordIcon} alt="Re-enter Password" />
           <input
             type="password"
-            placeholder="Re-enter Password"
+            className={rePasswordError ? "error-border" : ""}
+            placeholder="Re-type Password"
             value={rePassword}
             onChange={(e) => setRePassword(e.target.value)}
           />
@@ -128,8 +150,6 @@ const Signup = ({ setCurrentForm }) => {
           Sign Up
         </div>
       </div>
-
-      
     </div>
   );
 };

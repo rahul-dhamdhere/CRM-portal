@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import "./Auth.css";
-import emailIcon from "./assets/email.png";
-import passwordIcon from "./assets/password.png";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-const Login = ({ onLoginSuccess }) => {
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
-  // Validate Email
+  
   const validateEmail = (email) => {
     if (!email.includes("@") || !email.includes(".")) {
       setEmailError("Enter a valid email address.");
@@ -36,23 +36,24 @@ const Login = ({ onLoginSuccess }) => {
     }
 
     if (isValid) {
-      onLoginSuccess();
+      alert("Login Successful!");
     }
   };
 
   return (
     <div>
       <div className="header">
-        <div className="text">Login</div>
+        <div className="text">Log In</div>
         <div className="underline"></div>
       </div>
-
       <div className="inputs">
+      <label>Email Address</label>
+ 
         <div className="input">
-          <img src={emailIcon} alt="Email" />
+          
           <input
             type="email"
-            placeholder="Email"
+            placeholder="Email Address"
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
@@ -62,21 +63,30 @@ const Login = ({ onLoginSuccess }) => {
         </div>
         {emailError && <p className="error">{emailError}</p>}
 
-        <div className="input">
-          <img src={passwordIcon} alt="Password" />
+        <label>Password</label>
+        <div className="input password-input">
+         
           <input
-            type="password"
-            placeholder="Password"
+            type={showPassword ? "text" : "password"}
+            placeholder="Must have at least 8 characters"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+          {}
+          <span
+            className="eye-icon"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </span>
         </div>
         {passwordError && <p className="error">{passwordError}</p>}
       </div>
 
+
       <div className="submit-container">
         <div className="submit" onClick={handleLogin}>
-          Login
+          Log In
         </div>
       </div>
     </div>
