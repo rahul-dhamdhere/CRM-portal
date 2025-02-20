@@ -3,21 +3,36 @@ import Login from "./Login.jsx";
 import Signup from "./Signup.jsx";
 import ForgotPassword from "./ForgotPassword.jsx";
 import "./Auth.css";
-import logo from "./assets/stoicsalamanderlogo.jpg"; 
+import logo from "./assets/stoicsalamanderlogo.png"; 
 
 const Auth = () => {
   const [currentForm, setCurrentForm] = useState("login");
 
   return (
-    <div className="container">
-      <nav></nav> 
+   
+    <div className="c1">
 
-      {/* Forms */}
+    {}
+    
+    <nav className="nav-bar">
+    <img src={logo} alt="Company Logo" className="logo" />
+  
+  </nav> 
+
+
+
+    <div className="container">
+      
+      
+
+      {}
       {currentForm === "login" && <Login />}
       {currentForm === "signup" && <Signup />}
       {currentForm === "forgotPassword" && <ForgotPassword />}
 
-      {/* Switch Between Forms */}
+      
+
+      {}
       <div className="switch">
         {currentForm === "login" && (
           <>
@@ -29,12 +44,14 @@ const Auth = () => {
             </p>
           </>
         )}
+
         {currentForm === "signup" && (
           <p>
             Already have an account? <span onClick={() => setCurrentForm("login")}>Login here!</span>
           </p>
         )}
       </div>
+    </div>
     </div>
   );
 };

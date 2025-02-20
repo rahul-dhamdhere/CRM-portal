@@ -35,10 +35,11 @@ const ForgotPassword = () => {
       </div>
 
       <div className="inputs">
+        <label>Email Address</label>
         <div className="input">
           <input
             type="email"
-            placeholder="Enter your email"
+            placeholder="Enter Valid  email  address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             onBlur={() => validateEmail(email)}

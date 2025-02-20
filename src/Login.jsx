@@ -77,7 +77,7 @@ const Login = () => {
             className="eye-icon"
             onClick={() => setShowPassword(!showPassword)}
           >
-            {showPassword ? <FaEyeSlash /> : <FaEye />}
+            
           </span>
         </div>
         {passwordError && <p className="error">{passwordError}</p>}
