@@ -59,8 +59,8 @@
 .collapse-arrow {
   position: absolute;
   bottom: 20px; /* Position at the bottom */
-  left: 50%; /* Center horizontally */
-  transform: translateX(-50%); /* Center horizontally */
+  left: 5%; /* Center horizontally */
+  transform: translateX(-25%); /* Center horizontally */
   cursor: pointer;
   font-size: 20px;
   color: white;
@@ -68,6 +68,7 @@
 }
 
 .collapsed .collapse-arrow {
+  left: 1.5%;
   transform: translateX(-50%) rotate(180deg); /* Rotate arrow when collapsed */
 }
 
