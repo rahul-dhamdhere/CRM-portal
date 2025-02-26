@@ -65,6 +65,47 @@ const AddClientContact = ({ isOpen, onClose }) => {
               <input type="text" name="mobile" placeholder="Enter mobile number" maxLength="10" onChange={handleChange} />
             </div>
             <div className="form-group">
+          <label>Gender</label>
+          <select name="gender" onChange={handleChange}>
+            <option>Male</option>
+            <option>Female</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div className="form-group">
+          <label>Change Language</label>
+          <select name="language" onChange={handleChange}>
+            <option>English</option>
+            <option>Hindi</option>
+          </select>
+        </div>
+        <div className="form-group">
+          <label>Client Category</label>
+          <select name="clientCategory" onChange={handleChange}>
+            <option>--</option>
+          </select>
+        </div>
+        <div className="form-group">
+          <label>Client Sub Category</label>
+          <select name="clientSubCategory" onChange={handleChange}>
+            <option>--</option>
+          </select>
+        </div>
+        <div className="form-group">
+          <label>Login Allowed?</label>
+          <div>
+            <input type="radio" name="loginAllowed" value="Yes" onChange={handleChange} /> Yes
+            <input type="radio" name="loginAllowed" value="No" onChange={handleChange} defaultChecked /> No
+          </div>
+        </div>
+        <div className="form-group">
+          <label>Receive email notifications?</label>
+          <div>
+            <input type="radio" name="emailNotifications" value="Yes" onChange={handleChange} defaultChecked /> Yes
+            <input type="radio" name="emailNotifications" value="No" onChange={handleChange} /> No
+          </div>
+        </div>
+            <div className="form-group">
             <div className="profile-upload">
   <input 
     type="file" 
@@ -105,9 +146,26 @@ const AddClientContact = ({ isOpen, onClose }) => {
               <label>GST/VAT Number</label>
               <input type="text" name="gstNumber" placeholder="Enter GST/VAT number" onChange={handleChange} />
             </div>
+            
             <div className="form-group">
               <label>Company Address</label>
               <textarea name="companyAddress" placeholder="Enter company address" onChange={handleChange}></textarea>
+            </div>
+            <div className="form-group">
+              <label>Office Phone Number</label>
+              <input type="number" name="OfficePhoneNumber" placeholder="Office Phone Number" onChange={handleChange}></input>
+            </div>
+            <div className="form-group">
+              <label>City</label>
+              <input type="text" name="City" placeholder="Pune" onChange={handleChange}></input>
+            </div>
+            <div className="form-group">
+              <label>State</label>
+              <input type="text" name="State" placeholder="Maharashtra" onChange={handleChange}></input>
+            </div>
+            <div className="form-group">
+              <label>Postal Code</label>
+              <input type="text" name="PostalCode" placeholder="411005" onChange={handleChange}></input>
             </div>
           </div>
           
