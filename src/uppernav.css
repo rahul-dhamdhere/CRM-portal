@@ -1,52 +1,86 @@
 #uppernav {
-  width: 100%;
-  border: 1px solid rgba(128, 128, 128, 0.242);
-  display: flex;
-  background-color: #29304c; /* Dark background for the upper nav */
-  color: white;
-  height: 7%; /* Fixed height for the upper nav */
   display: flex;
   align-items: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow */
-  justify-content: space-between; /* Better spacing */
-  padding: 0px; /* Reduced padding */
+  justify-content: space-between;
+  padding: 10px 20px;
+  background-color:#29304c; /* Adjust if needed */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#left {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between logo and heading */
 }
 
 #logo-nav1 {
-  height: 25px;
-  width: 25px;
-  padding-left: 0.5vw;
+  height: 50px;
+  width: 50px;
 }
 
-#logo-nav2 {
-  height: 30px;
-  width: 30px;
+#left h3 {
+  font-size: 22px;
+  font-weight: bold;
+  color: white;
+  margin: 0; /* Remove default margin */
 }
 
-#uppernav h3 {
-  padding-left: 0.25vw;
-  padding-top: 1vh;
-  font-size: 18px;
-  white-space: nowrap;
-}
-
-#left, #right {
+#right {
   display: flex;
   align-items: center;
-  width: 3.25%; /* Remove fixed width */
-  float: none; /* Remove float */
+  gap: 15px;
 }
 
-/* Mobile styles */
-@media (max-width: 768px) {
-  #uppernav {
-    height: 50px;
-    padding: 0 10px;
-  }
+/* Profile Dropdown */
+.profile-dropdown {
+  position: relative;
+  display: inline-block;
+}
 
-  #uppernav h3 {
-    font-size: 16px;
-    display: none; /* Hide text on mobile */
+#profile-icon {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+  min-width: 120px;
+  top: 50px;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, transform 0.2s ease-in-out;
+  transform: translateY(-10px);
+}
+
+.profile-dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-menu p {
+  margin: 0;
+  padding: 12px 16px;
+  cursor: pointer;
+  color: #333;
+  transition: background 0.3s;
+}
+
+.dropdown-menu p:hover {
+  background-color: #f1f1f1;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  #left h3 {
+    font-size: 18px;
   }
 
   #logo-nav1 {
@@ -54,27 +88,22 @@
     width: 30px;
   }
 
-  #logo-nav2 {
-    height: 25px;
-    width: 25px;
-  }
-
-  #left, #right {
-    width: 10%;
+  #profile-icon {
+    height: 35px;
+    width: 35px;
   }
 }
 
 @media (max-width: 480px) {
   #uppernav {
-    padding: 0 5px;
+    padding: 0 10px;
   }
 
-  #logo-nav1 {
-    height: 25px;
-    width: 25px;
+  #left h3 {
+    font-size: 16px;
   }
 
-  #left, #right {
-    width: 12%;
+  #right {
+    gap: 8px;
   }
 }

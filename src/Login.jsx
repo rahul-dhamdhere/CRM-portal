@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./Auth.css";
+import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
@@ -8,6 +9,8 @@ const Login = () => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  const navigate = useNavigate();
 
   
   const validateEmail = (email) => {
@@ -37,6 +40,7 @@ const Login = () => {
 
     if (isValid) {
       alert("Login Successful!");
+      navigate("/dashboard.jsx");
     }
   };
 
@@ -76,14 +80,11 @@ const Login = () => {
           <span
             className="eye-icon"
             onClick={() => setShowPassword(!showPassword)}
-          >
-            
+          > 
           </span>
         </div>
         {passwordError && <p className="error">{passwordError}</p>}
       </div>
-
-
       <div className="submit-container">
         <div className="submit" onClick={handleLogin}>
           Log In

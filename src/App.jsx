@@ -7,14 +7,19 @@ import Lead from './Lead.jsx';
 import Client from './Client.jsx';
 import Setting from './Settings.jsx';
 import Auth from './Auth.jsx';
+import Login from './Login.jsx';
+
 
 function App() {
   return (
     <Router>
       <Routes>
+      <Route path="/Login/*" element={<Login />} />
         <Route path="/auth/*" element={<Auth />} />
         <Route path="/*" element={<MainApp />} />
         <Route path="*" element={<Navigate to="/auth" />} />
+        <Route path="*" element={<Navigate to="/auth" />} />
+      
       </Routes>
     </Router>
   );

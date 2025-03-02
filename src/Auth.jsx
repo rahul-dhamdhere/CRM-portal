@@ -22,9 +22,6 @@ const Auth = () => {
 
 
     <div className="container">
-      
-      
-
       {}
       {currentForm === "login" && <Login />}
       {currentForm === "signup" && <Signup />}
