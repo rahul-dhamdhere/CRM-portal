@@ -47,7 +47,7 @@
 .dropdown-menu {
   position: absolute;
   right: 0;
-  background-color: white;
+  background-color:#29304c;
   border-radius: 8px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
   min-width: 120px;
@@ -69,7 +69,7 @@
   margin: 0;
   padding: 12px 16px;
   cursor: pointer;
-  color: #e5e1e1;
+  color: #f5f5f5;
   transition: background 0.3s;
 }
 
