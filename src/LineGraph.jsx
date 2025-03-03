@@ -10,6 +10,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  Filler // Import the Filler plugin
 } from 'chart.js';
 
 ChartJS.register(
@@ -19,7 +20,8 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler // Register the Filler plugin
 );
 
 const LineGraph = () => {
@@ -31,7 +33,7 @@ const LineGraph = () => {
         label: 'Clients',
         data: [100, 150, 300, 500, 700, 800, 900, 1200, 1500, 1800, 2100, 2500],
         borderColor: 'white', // YouTube red
-        backgroundColor: 'rgba(255, 0, 0, )',
+        backgroundColor: 'rgba(255, 0, 0, 0.2)', // Add transparency to the background color
         tension: 0.4, // Makes the line curved
         borderWidth: 2,
         pointRadius: 3,

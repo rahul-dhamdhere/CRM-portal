@@ -12,7 +12,6 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  
   const validateEmail = (email) => {
     if (!email.includes("@") || !email.includes(".")) {
       setEmailError("Enter a valid email address.");
@@ -40,7 +39,7 @@ const Login = () => {
 
     if (isValid) {
       alert("Login Successful!");
-      navigate("/dashboard.jsx");
+      navigate("/"); // Navigate to the dashboard route
     }
   };
 
@@ -51,10 +50,8 @@ const Login = () => {
         <div className="underline"></div>
       </div>
       <div className="inputs">
-      <label>Email Address</label>
- 
+        <label>Email Address</label>
         <div className="input">
-          
           <input
             type="email"
             placeholder="Email Address"
@@ -69,19 +66,17 @@ const Login = () => {
 
         <label>Password</label>
         <div className="input password-input">
-         
           <input
             type={showPassword ? "text" : "password"}
             placeholder="Must have at least 8 characters"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          {}
           <span
             className="eye-icon"
             onClick={() => setShowPassword(!showPassword)}
-          > 
-          </span>
+          >
+                      </span>
         </div>
         {passwordError && <p className="error">{passwordError}</p>}
       </div>
