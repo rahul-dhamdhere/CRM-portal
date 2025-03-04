@@ -29,6 +29,7 @@ const ProfileSettings = () => {
   return (
     <div className="profile-settings-container">
       <aside className="sidebar">
+        {/* // page change */}
         <h2>Profile Settings</h2>
         <ul>
           <li><a href="#">Profile Settings</a></li>
