@@ -1,11 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "./Auth.css"; // Use the same CSS file
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Use useNavigate
 
   const validateEmail = (email) => {
     if (!email) {
@@ -58,7 +59,7 @@ const ForgotPassword = () => {
       {successMessage && <p className="success">{successMessage}</p>}
 
       <div className="acc">
-        Remember your password? <span onClick={() => window.location.href = "/login"}>Login</span>
+        Remember your password? <span onClick={() => navigate("/login")}>Login</span>
       </div>
     </div>
   );
