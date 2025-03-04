@@ -39,9 +39,9 @@ const ProfileSettings = () => {
       <main className="content">
         <div className="profile-header">
           <h2>Profile Settings</h2>
-          <div className="search-box">
+          {/* <div className="search-box">
             <input type="search" placeholder="Search" />
-          </div>
+          </div> */}
         </div>
 
         <form onSubmit={handleSubmit}>
