@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./Auth.css";
 import { useNavigate } from "react-router-dom";
+
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
@@ -22,27 +23,27 @@ const Login = () => {
 
   const handleLogin = () => {
     let isValid = true;
-
+  
     if (email.trim() === "") {
       setEmailError("Email is required.");
       isValid = false;
     } else {
       validateEmail(email);
     }
-
+  
     if (password.trim() === "") {
       setPasswordError("Password is required.");
       isValid = false;
     } else {
       setPasswordError("");
     }
-
+  
     if (isValid) {
       alert("Login Successful!");
-      navigate("/"); // Navigate to the dashboard route
+      navigate("/dashboard.jsx"); // ✅ Fixed navigation
     }
   };
-
+  
   return (
     <div>
       <div className="header">
