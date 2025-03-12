@@ -1,12 +1,11 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import pymysql
-import bcrypt
 
 app = Flask(__name__)
 CORS(app)
 
-
+# Database connection
 db = pymysql.connect(
     host='localhost',
     user='root',         
@@ -20,15 +19,12 @@ def signup():
     companyName = data.get('companyName')
     name = data.get('name')
     email = data.get('email')
-    password = data.get('password')  
-
-    # Hash the password before storing
-    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    password = data.get('password')  # Storing plain text password
 
     try:
         with db.cursor() as cursor:
             sql = "INSERT INTO members (companyName, name, email, password) VALUES (%s, %s, %s, %s)"
-            cursor.execute(sql, (companyName, name, email, hashed_password))
+            cursor.execute(sql, (companyName, name, email, password))
             db.commit()
 
         return jsonify({'message': 'Signup successful!'}), 201
@@ -49,10 +45,10 @@ def login():
             result = cursor.fetchone()
 
             if result:
-                stored_password = result[0]  # Fetched hashed password
+                stored_password = result[0]  # Fetched plain text password
 
-                # Verify the password using bcrypt
-                if bcrypt.checkpw(password.encode('utf-8'), stored_password.encode('utf-8')):
+                # Directly compare passwords (insecure but as per your request)
+                if password == stored_password:
                     return jsonify({'message': 'Login successful!'}), 200
                 else:
                     return jsonify({'error': 'Invalid credentials.'}), 401
@@ -61,7 +57,6 @@ def login():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
 
 if __name__ == '__main__':
     app.run(debug=True)
