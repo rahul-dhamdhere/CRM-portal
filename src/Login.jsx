@@ -1,15 +1,13 @@
 import React, { useState } from "react";
+import axios from 'axios'; // Import axios for API requests
 import "./Auth.css";
 import { useNavigate } from "react-router-dom";
-
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -21,7 +19,7 @@ const Login = () => {
     }
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     let isValid = true;
   
     if (email.trim() === "") {
@@ -39,17 +37,32 @@ const Login = () => {
     }
   
     if (isValid) {
-      alert("Login Successful!");
-      navigate("/dashboard.jsx"); // ✅ Fixed navigation
+      try {
+        const response = await axios.post('http://localhost:5000/login', {
+          email,
+          password
+        });
+  
+        if (response.data.message) {
+          alert("Login Successful!");
+          navigate("/dashboard");  // Redirect on successful login
+        } else {
+          alert(response.data.error || "Login failed.");
+        }
+      } catch (error) {
+        alert("Invalid credentials. Please try again.");
+      }
     }
   };
   
+
   return (
     <div>
       <div className="header">
         <div className="text">Log In</div>
         <div className="underline"></div>
       </div>
+
       <div className="inputs">
         <label>Email Address</label>
         <div className="input">
@@ -63,24 +76,18 @@ const Login = () => {
             }}
           />
         </div>
-        {emailError && <p className="error">{emailError}</p>}
 
         <label>Password</label>
-        <div className="input password-input">
+        <div className="input">
           <input
-            type={showPassword ? "text" : "password"}
+            type="password"
             placeholder="Must have at least 8 characters"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <span
-            className="eye-icon"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-                      </span>
         </div>
-        {passwordError && <p className="error">{passwordError}</p>}
       </div>
+
       <div className="submit-container">
         <div className="submit" onClick={handleLogin}>
           Log In

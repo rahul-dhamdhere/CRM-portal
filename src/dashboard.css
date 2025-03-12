@@ -12,18 +12,18 @@
     height: 175px;
     border: 1px solid rgba(128, 128, 128, 0.242);
     border-radius: 10px;
-    background: linear-gradient(135deg, #1a1f33, #29304c); /* Gradient background */
+    background: linear-gradient(135deg, #1a1f33, #29304c);
     padding: 15px;
     color: white;
     display: flex;
     align-items: center;
     font-size: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow */
-    transition: transform 0.3s ease; /* Smooth transform */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    transition: transform 0.3s ease; 
 }
 
 .profile-card:hover {
-    transform: translateY(-5px); /* Lift on hover */
+    transform: translateY(-5px); 
 }
 
 #pic {

@@ -7,8 +7,7 @@ import Lead from './Lead.jsx';
 import Client from './Client.jsx';
 import Setting from './Settings.jsx';
 import Auth from './Auth.jsx';
-import Login from './Login.jsx';
-import ForgotPassword from './ForgotPassword.jsx';
+
 
 
 function App() {

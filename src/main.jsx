@@ -8,6 +8,7 @@ const root = createRoot(document.getElementById('root'));
 // Render the components inside a flex container
 root.render(
   <StrictMode>
+    
     <App />
   </StrictMode>
 );
