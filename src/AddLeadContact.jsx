@@ -59,8 +59,25 @@ const AddLeadContact = ({ isOpen, onClose, onAddLead }) => {
     if (!validateForm()) return;
 
     const leadData = {
+      salutation: formData.salutation,
       name: formData.name,
-      leadOwner: "Sahil Deshpande", // Hardcoded value from form
+      email: formData.email,
+      dealName: formData.dealName,
+      pipeline: formData.pipeline,
+      dealStage: formData.dealStage,
+      dealValue: formData.dealValue,
+      closeDate: formData.closeDate,
+      product: formData.product,
+      companyName: formData.companyName,
+      website: formData.website,
+      mobile: formData.mobile,
+      officePhone: formData.officePhone,
+      country: formData.country,
+      state: formData.state,
+      city: formData.city,
+      postalCode: formData.postalCode,
+      address: formData.address,
+      leadOwner: "Sahil Deshpande", // Hardcoded value
       addedBy: "Admin", // Example value
       created: new Date().toISOString().split("T")[0], // Current date in YYYY-MM-DD
     };

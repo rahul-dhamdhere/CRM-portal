@@ -10,15 +10,56 @@
 }
 
 .popup-container {
-  padding: 20px;
-  border-radius: 8px;
-  width: 70%;
-  max-width: 90%;
-  max-height: 100vh;
+  padding: 30px;
+  border-radius: 10px;
+  width: 60%;
+  max-width: 80%;
+  max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
   background: #1a1f33;
   color: white;
+}
+
+.popup-container h2 {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.popup-container p {
+  font-size: 16px;
+  margin: 5px 0;
+  line-height: 1.5;
+}
+
+.popup-container p strong {
+  font-weight: bold;
+  color: #007bff;
+}
+
+.popup-container .btn {
+  margin-top: 20px;
+  display: block;
+  width: 100px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  background: #007bff;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.popup-container .btn:hover {
+  background: #0056b3;
+}
+
+.popup-container p:last-child {
+  margin-bottom: 20px;
 }
 
 .form-grid {
@@ -49,6 +90,11 @@ input, select , textarea {
   border: 1px solid #ccc;
   border-radius: 4px;
   color:white;
+}
+
+input[type="date"] {
+  background-color: white;
+  color:black;
 }
 
 .form-actions {

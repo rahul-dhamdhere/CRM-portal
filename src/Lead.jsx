@@ -13,6 +13,8 @@ const Lead = () => {
   const [error, setError] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredLeads, setFilteredLeads] = useState([]);
+  const [selectedLead, setSelectedLead] = useState(null); // State for selected lead
+  const [isDetailsPopupOpen, setIsDetailsPopupOpen] = useState(false); // State for details popup
 
   useEffect(() => {
     const fetchLeads = async () => {
@@ -84,6 +86,79 @@ const Lead = () => {
     </div>
   );
 
+  const handleViewDetails = (lead) => {
+    setSelectedLead(lead); // Set the selected leadm the API are passed here
+    setIsDetailsPopupOpen(true); // Open the details popup
+  };
+
+  const handleRemoveLead = async (leadId) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/leads/${leadId}`);
+      setLeads(leads.filter((lead) => lead.id !== leadId)); // Remove lead from state
+      setFilteredLeads(filteredLeads.filter((lead) => lead.id !== leadId)); // Update filtered leads
+      alert("Lead removed successfully.");
+    } catch (error) {
+      console.error("Error removing lead:", error);
+      alert("Failed to remove lead. Please try again.");
+    }
+  };
+
+  const handleExportLeads = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/api/leads/export", {
+        responseType: "blob", // Ensure the response is treated as a file
+      });
+
+      // Create a URL for the blob and trigger the download
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "leads_export.pdf"); // Set the file name
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      alert("PDF exported and downloaded successfully.");
+    } catch (error) {
+      console.error("Error exporting leads:", error);
+      alert("Failed to export leads. Please try again.");
+    }
+  };
+
+  const renderDetailsPopup = () => {
+    if (!isDetailsPopupOpen || !selectedLead) return null;
+
+    return (
+      <div className="popup-overlay">
+        <div className="popup-container">
+          <h2>Lead Details</h2>
+          <p><strong>Salutation:</strong> {selectedLead.salutation}</p>
+          <p><strong>Name:</strong> {selectedLead.name}</p>
+          <p><strong>Email:</strong> {selectedLead.email}</p>
+          <p><strong>Deal Name:</strong> {selectedLead.dealName}</p>
+          <p><strong>Pipeline:</strong> {selectedLead.pipeline}</p>
+          <p><strong>Deal Stage:</strong> {selectedLead.dealStage}</p>
+          <p><strong>Deal Value:</strong> {selectedLead.dealValue}</p>
+          <p><strong>Close Date:</strong> {selectedLead.closeDate}</p>
+          <p><strong>Product:</strong> {selectedLead.product}</p>
+          <p><strong>Company Name:</strong> {selectedLead.companyName}</p>
+          <p><strong>Website:</strong> {selectedLead.website}</p>
+          <p><strong>Mobile:</strong> {selectedLead.mobile}</p>
+          <p><strong>Office Phone:</strong> {selectedLead.officePhone}</p>
+          <p><strong>Country:</strong> {selectedLead.country}</p>
+          <p><strong>State:</strong> {selectedLead.state}</p>
+          <p><strong>City:</strong> {selectedLead.city}</p>
+          <p><strong>Postal Code:</strong> {selectedLead.postalCode}</p>
+          <p><strong>Address:</strong> {selectedLead.address}</p>
+          <p><strong>Lead Owner:</strong> {selectedLead.owner}</p>
+          <p><strong>Added By:</strong> {selectedLead.addedBy}</p>
+          <p><strong>Created:</strong> {selectedLead.created}</p>
+          <button className="btn" onClick={() => setIsDetailsPopupOpen(false)}>Close</button>
+        </div>
+      </div>
+    );
+  };
+
   const renderTable = () => {
     if (loading) return <p>Loading leads...</p>;
     if (error) return <p className="text-danger">{error}</p>;
@@ -115,13 +190,13 @@ const Lead = () => {
                   {activeDropdown === lead.id && (
                     <ul className="dropdown-menu show">
                       <li>
-                        <button className="dropdown-item" onClick={() => alert(`View details for lead ID: ${lead.id}`)}>
+                        <button className="dropdown-item" onClick={() => handleViewDetails(lead)}>
                           👁 <strong>View</strong>
                         </button>
                       </li>
                       <li>
-                        <button className="dropdown-item" onClick={() => alert(`Change lead ID: ${lead.id} to Client`)}>
-                          👤 <strong>Change To Client</strong>
+                        <button className="dropdown-item text-danger" onClick={() => handleRemoveLead(lead.id)}>
+                          🗑  <strong>Remove Lead</strong>
                         </button>
                       </li>
                       <li className="text-end">
@@ -175,13 +250,14 @@ const Lead = () => {
           <button className="btn btn-primary" onClick={() => setIsPopupOpen(true)}>
             <FaPlus /> Add Lead Contact
           </button>
-          <button className="btn btn-outline-secondary import-btn">
+          <button className="btn btn-outline-secondary import-btn" onClick={handleExportLeads}>
             ⬆ Import
           </button>
         </span>
       </div>
       <br />
       {renderTable()}
+      {renderDetailsPopup()} {/* Render the details popup */}
       <AddLeadContact
         isOpen={isPopupOpen}
         onClose={() => setIsPopupOpen(false)}
