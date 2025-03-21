@@ -49,28 +49,45 @@ def get_clients():
 # Add a new client
 @app.route('/api/clients', methods=['POST'])
 def add_client():
-    data = request.json
-
-    # Validate required fields
-    required_fields = ["name", "created_at"]
-    if not all(field in data for field in required_fields):
-        return jsonify({"error": "Missing required fields"}), 400
-
-    # Validate date format (YYYY-MM-DD)
     try:
-        datetime.strptime(data["created_at"], "%Y-%m-%d")
-    except ValueError:
-        return jsonify({"error": "Invalid date format. Use YYYY-MM-DD."}), 400
+        # Parse form data
+        name = request.form.get('name')
+        email = request.form.get('email')
+        phone = request.form.get('phone')
+        company = request.form.get('company')
+        created_at = request.form.get('created_at')
 
-    client_id = str(uuid.uuid4())
-    new_client = (client_id, data["name"], data.get("email", ""), data.get("phone", ""), data.get("company", ""), data["created_at"])
+        # Validate required fields
+        if not name or not created_at:
+            return jsonify({"error": "Missing required fields"}), 400
 
-    try:
+        # Validate date format (YYYY-MM-DD)
+        try:
+            datetime.strptime(created_at, "%Y-%m-%d")
+        except ValueError:
+            return jsonify({"error": "Invalid date format. Use YYYY-MM-DD."}), 400
+
+        # Handle file uploads (optional)
+        profile_picture = request.files.get('profilePicture')
+        company_logo = request.files.get('companyLogo')
+
+        # Save files if provided (optional)
+        if profile_picture:
+            profile_picture.save(f"./uploads/{profile_picture.filename}")
+        if company_logo:
+            company_logo.save(f"./uploads/{company_logo.filename}")
+
+        # Generate a unique ID for the client
+        client_id = str(uuid.uuid4())
+
+        # Insert client data into the database
+        new_client = (client_id, name, email, phone, company, created_at)
         conn = sqlite3.connect("crm.db", check_same_thread=False)
         cursor = conn.cursor()
         cursor.execute("INSERT INTO clients (id, name, email, phone, company, created_at) VALUES (?, ?, ?, ?, ?, ?)", new_client)
         conn.commit()
-        return jsonify({"message": "Client added successfully", "client": {"id": client_id, "name": data["name"]}}), 201
+
+        return jsonify({"message": "Client added successfully", "client": {"id": client_id, "name": name}}), 201
     except sqlite3.Error as e:
         return jsonify({"error": f"Database error: {str(e)}"}), 500
     finally:

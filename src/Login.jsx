@@ -1,60 +1,31 @@
 import React, { useState } from "react";
-import axios from 'axios'; // Import axios for API requests
+import axios from "axios";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "./Auth.css";
-import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-
-  const navigate = useNavigate();
-
-  const validateEmail = (email) => {
-    if (!email.includes("@") || !email.includes(".")) {
-      setEmailError("Enter a valid email address.");
-    } else {
-      setEmailError("");
-    }
-  };
+  const [error, setError] = useState("");
+  const navigate = useNavigate(); // Hook for navigation
 
   const handleLogin = async () => {
-    let isValid = true;
-  
-    if (email.trim() === "") {
-      setEmailError("Email is required.");
-      isValid = false;
-    } else {
-      validateEmail(email);
-    }
-  
-    if (password.trim() === "") {
-      setPasswordError("Password is required.");
-      isValid = false;
-    } else {
-      setPasswordError("");
-    }
-  
-    if (isValid) {
-      try {
-        const response = await axios.post('http://localhost:5000/login', {
-          email,
-          password
-        });
-  
-        if (response.data.message) {
-          alert("Login Successful!");
-          navigate("/dashboard");  // Redirect on successful login
-        } else {
-          alert(response.data.error || "Login failed.");
-        }
-      } catch (error) {
-        alert("Invalid credentials. Please try again.");
+    try {
+      const response = await axios.post("http://localhost:5000/auth/login", {
+        email,
+        password,
+      });
+
+      if (response.data.message) {
+        alert("Login Successful!");
+        navigate("/"); // Redirect to the dashboard
+      } else {
+        setError(response.data.error || "Login failed.");
       }
+    } catch (error) {
+      setError(error.response?.data?.error || "Invalid credentials. Please try again.");
     }
   };
-  
 
   return (
     <div>
@@ -70,10 +41,7 @@ const Login = () => {
             type="email"
             placeholder="Email Address"
             value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              validateEmail(e.target.value);
-            }}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
 
@@ -81,12 +49,14 @@ const Login = () => {
         <div className="input">
           <input
             type="password"
-            placeholder="Must have at least 8 characters"
+            placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
       </div>
+
+      {error && <p className="error">{error}</p>}
 
       <div className="submit-container">
         <div className="submit" onClick={handleLogin}>

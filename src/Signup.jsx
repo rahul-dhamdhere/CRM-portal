@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from 'axios'; // Import axios for API requests
+import axios from "axios";
 import "./Auth.css";
 
 const Signup = ({ setCurrentForm }) => {
@@ -7,79 +7,25 @@ const Signup = ({ setCurrentForm }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [rePassword, setRePassword] = useState("");
+  const [error, setError] = useState("");
 
-  const [companyNameError, setCompanyNameError] = useState("");
-  const [nameError, setNameError] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [rePasswordError, setRePasswordError] = useState("");
+  const handleSignup = async () => {
+    try {
+      const response = await axios.post("http://localhost:5000/auth/signup", {
+        companyName,
+        name,
+        email,
+        password,
+      });
 
-  const validateEmail = (email) => {
-    if (!email.includes("@") || !email.includes(".")) {
-      setEmailError("Enter a valid email address.");
-    } else {
-      setEmailError("");
-    }
-  };
-
-  const register = async () => {
-    let isValid = true;
-
-    if (companyName.trim() === "") {
-      setCompanyNameError("The Company Name field is required.");
-      isValid = false;
-    } else {
-      setCompanyNameError("");
-    }
-
-    if (name.trim() === "") {
-      setNameError("The Name field is required.");
-      isValid = false;
-    } else {
-      setNameError("");
-    }
-
-    if (email.trim() === "") {
-      setEmailError("The Email field is required.");
-      isValid = false;
-    } else {
-      validateEmail(email);
-    }
-
-    if (password.trim() === "") {
-      setPasswordError("The Password field is required.");
-      isValid = false;
-    } else if (password.length < 8) {
-      setPasswordError("Password must be at least 8 characters.");
-      isValid = false;
-    } else {
-      setPasswordError("");
-    }
-
-    if (rePassword.trim() === "") {
-      setRePasswordError("Re-enter password.");
-      isValid = false;
-    } else if (password !== rePassword) {
-      setRePasswordError("Passwords do not match.");
-      isValid = false;
-    } else {
-      setRePasswordError("");
-    }
-
-    if (isValid) {
-      try {
-        const response = await axios.post('http://localhost:5000/signup', {
-          companyName,
-          name,
-          email,
-          password
-        });
-
-        alert(response.data.message || "Signup successful!");
-      } catch (error) {
-        alert(error.response?.data?.error || "Signup failed. Try again!");
+      if (response.data.message) {
+        alert("Signup Successful!");
+        setCurrentForm("login"); // Switch to login form
+      } else {
+        setError(response.data.error || "Signup failed.");
       }
+    } catch (error) {
+      setError(error.response?.data?.error || "Signup failed. Please try again.");
     }
   };
 
@@ -95,7 +41,7 @@ const Signup = ({ setCurrentForm }) => {
         <div className="input">
           <input
             type="text"
-            placeholder="e.g Acme Corporation"
+            placeholder="Company Name"
             value={companyName}
             onChange={(e) => setCompanyName(e.target.value)}
           />
@@ -105,7 +51,7 @@ const Signup = ({ setCurrentForm }) => {
         <div className="input">
           <input
             type="text"
-            placeholder="e.g John Doe"
+            placeholder="Your Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
@@ -115,12 +61,9 @@ const Signup = ({ setCurrentForm }) => {
         <div className="input">
           <input
             type="email"
-            placeholder="e.g johndoe@gmail.com"
+            placeholder="Email Address"
             value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              validateEmail(e.target.value);
-            }}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
 
@@ -128,25 +71,17 @@ const Signup = ({ setCurrentForm }) => {
         <div className="input">
           <input
             type="password"
-            placeholder="Must have at least 8 characters"
+            placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-
-        <label>Re-Enter Password</label>
-        <div className="input">
-          <input
-            type="password"
-            placeholder="Re-type Password"
-            value={rePassword}
-            onChange={(e) => setRePassword(e.target.value)}
-          />
-        </div>
       </div>
 
+      {error && <p className="error">{error}</p>}
+
       <div className="submit-container">
-        <div className="submit" onClick={register}>
+        <div className="submit" onClick={handleSignup}>
           Sign Up
         </div>
       </div>
