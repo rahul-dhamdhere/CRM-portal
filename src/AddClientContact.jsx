@@ -33,6 +33,8 @@ const AddClientContact = ({ isOpen, onClose, onAddClient }) => {
   const [errors, setErrors] = useState({});
   const [profilePreview, setProfilePreview] = useState(null);
   const [logoPreview, setLogoPreview] = useState(null);
+  const [showCompanyDetails, setShowCompanyDetails] = useState(false);
+  const [showAdditionalDetails, setShowAdditionalDetails] = useState(false);
 
   if (!isOpen) return null;
 
@@ -89,54 +91,39 @@ const AddClientContact = ({ isOpen, onClose, onAddClient }) => {
     clientData.append("name", formData.clientName);
     clientData.append("email", formData.email);
     clientData.append("phone", formData.mobile);
-    clientData.append("company", formData.companyName);
+    clientData.append("companyName", formData.companyName); // Include company name
+    clientData.append("companyAddress", formData.companyAddress); // Include company address
     clientData.append("created_at", new Date().toISOString().split("T")[0]);
     if (formData.profilePicture) clientData.append("profilePicture", formData.profilePicture);
     if (formData.companyLogo) clientData.append("companyLogo", formData.companyLogo);
+    clientData.append("salutation", formData.salutation);
+    clientData.append("profilePicture", formData.profilePicture);
+    clientData.append("companyLogo", formData.companyLogo);
+    clientData.append("website", formData.website);
+    clientData.append("taxName", formData.taxName);
+    clientData.append("gstNumber", formData.gstNumber);
+    clientData.append("officePhoneNumber", formData.officePhoneNumber);
+    clientData.append("city", formData.city);
+    clientData.append("state", formData.state);
+    clientData.append("postalCode", formData.postalCode);
+    clientData.append("addedBy", formData.addedBy);
+    clientData.append("shippingAddress", formData.shippingAddress);
+    clientData.append("note", formData.note); // Include note field
 
     try {
-      const response = await axios.post("http://localhost:5000/api/clients", clientData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      alert(response.data.message);
-      onAddClient(response.data.client); // Notify parent component about the new client
-      onClose(); // Close the popup
-      setFormData({ // Reset form data
-        salutation: "",
-        clientName: "",
-        email: "",
-        country: "India",
-        mobile: "",
-        gender: "Male",
-        language: "English",
-        clientCategory: "",
-        clientSubCategory: "",
-        loginAllowed: "No",
-        emailNotifications: "Yes",
-        profilePicture: null,
-        companyName: "",
-        website: "",
-        taxName: "",
-        gstNumber: "",
-        companyAddress: "",
-        officePhoneNumber: "",
-        city: "",
-        state: "",
-        postalCode: "",
-        addedBy: "",
-        shippingAddress: "",
-        note: "",
-        companyLogo: null,
-      });
-      setProfilePreview(null);
-      setLogoPreview(null);
+        const response = await axios.post("http://localhost:5000/api/clients", clientData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+        alert(response.data.message);
+        onAddClient(response.data.client); // Notify parent component about the new client
+        onClose(); // Close the popup
     } catch (error) {
-      console.error("Error saving client:", error);
-      alert(error.response?.data?.error || "Failed to save client.");
+        console.error("Error saving client:", error.response || error); // Log the full error response
+        alert(error.response?.data?.error || "Failed to save client.");
     }
-  };
+};
 
   return (
     <div className="form-container show">
@@ -286,154 +273,174 @@ const AddClientContact = ({ isOpen, onClose, onAddClient }) => {
             </div>
           </div>
 
-          <h3>Company Details</h3>
+          <h3>
+            Company Details
+            <button
+              type="button"
+              className="dropdown-toggle"
+              onClick={() => setShowCompanyDetails(!showCompanyDetails)}
+            >
+              {showCompanyDetails ? "▲" : "▼"}
+            </button>
+          </h3>
           <br />
-
-          <div className="form-group-container">
-            <div className="form-group">
-              <label>Company Name *</label>
-              <input
-                type="text"
-                name="companyName"
-                value={formData.companyName}
-                onChange={handleChange}
-                placeholder="Enter company name"
-                className={errors.companyName ? "error" : ""}
-                required
-              />
-              {errors.companyName && <span className="error-message">{errors.companyName}</span>}
-            </div>
-            <div className="form-group">
-              <label>Official Website</label>
-              <input
-                type="text"
-                name="website"
-                value={formData.website}
-                onChange={handleChange}
-                placeholder="Enter website URL"
-              />
-            </div>
-            <div className="form-group">
-              <label>Tax Name</label>
-              <input
-                type="text"
-                name="taxName"
-                value={formData.taxName}
-                onChange={handleChange}
-                placeholder="Enter tax name"
-              />
-            </div>
-            <div className="form-group">
-              <label>GST/VAT Number</label>
-              <input
-                type="text"
-                name="gstNumber"
-                value={formData.gstNumber}
-                onChange={handleChange}
-                placeholder="Enter GST/VAT number"
-              />
-            </div>
-            <div className="form-group">
-              <label>Company Address</label>
-              <textarea
-                name="companyAddress"
-                value={formData.companyAddress}
-                onChange={handleChange}
-                placeholder="Enter company address"
-              ></textarea>
-            </div>
-            <div className="form-group">
-              <label>Office Phone Number</label>
-              <input
-                type="number"
-                name="officePhoneNumber"
-                value={formData.officePhoneNumber}
-                onChange={handleChange}
-                placeholder="Office Phone Number"
-              />
-            </div>
-            <div className="form-group">
-              <label>City</label>
-              <input
-                type="text"
-                name="city"
-                value={formData.city}
-                onChange={handleChange}
-                placeholder="Pune"
-              />
-            </div>
-            <div className="form-group">
-              <label>State</label>
-              <input
-                type="text"
-                name="state"
-                value={formData.state}
-                onChange={handleChange}
-                placeholder="Maharashtra"
-              />
-            </div>
-            <div className="form-group">
-              <label>Postal Code</label>
-              <input
-                type="text"
-                name="postalCode"
-                value={formData.postalCode}
-                onChange={handleChange}
-                placeholder="411005"
-              />
-            </div>
-          </div>
-
-          <h3>Additional Details</h3>
-          <br />
-
-          <div className="form-group-container">
-            <div className="form-group">
-              <label>Added By *</label>
-              <input
-                type="text"
-                name="addedBy"
-                value={formData.addedBy}
-                onChange={handleChange}
-                placeholder="Enter your name"
-                className={errors.addedBy ? "error" : ""}
-                required
-              />
-              {errors.addedBy && <span className="error-message">{errors.addedBy}</span>}
-            </div>
-            <div className="form-group">
-              <label>Shipping Address</label>
-              <textarea
-                name="shippingAddress"
-                value={formData.shippingAddress}
-                onChange={handleChange}
-                placeholder="Enter shipping address"
-              ></textarea>
-            </div>
-            <div className="form-group">
-              <label>Note</label>
-              <textarea
-                name="note"
-                value={formData.note}
-                onChange={handleChange}
-                placeholder="Enter additional notes"
-              ></textarea>
-            </div>
-            <div className="form-group">
-              <label>Company Logo</label>
-              <div className="logo-upload">
+          {showCompanyDetails && (
+            <div className="form-group-container">
+              <div className="form-group">
+                <label>Company Name *</label>
                 <input
-                  type="file"
-                  name="companyLogo"
-                  accept="image/*"
+                  type="text"
+                  name="companyName"
+                  value={formData.companyName}
                   onChange={handleChange}
+                  placeholder="Enter company name"
+                  className={errors.companyName ? "error" : ""}
+                  required
                 />
-                {logoPreview && (
-                  <img src={logoPreview} alt="Company Logo Preview" className="image-preview" style={{ width: "200px", height: "200px" }} />
-                )}
+                {errors.companyName && <span className="error-message">{errors.companyName}</span>}
+              </div>
+              <div className="form-group">
+                <label>Official Website</label>
+                <input
+                  type="text"
+                  name="website"
+                  value={formData.website}
+                  onChange={handleChange}
+                  placeholder="Enter website URL"
+                />
+              </div>
+              <div className="form-group">
+                <label>Tax Name</label>
+                <input
+                  type="text"
+                  name="taxName"
+                  value={formData.taxName}
+                  onChange={handleChange}
+                  placeholder="Enter tax name"
+                />
+              </div>
+              <div className="form-group">
+                <label>GST/VAT Number</label>
+                <input
+                  type="text"
+                  name="gstNumber"
+                  value={formData.gstNumber}
+                  onChange={handleChange}
+                  placeholder="Enter GST/VAT number"
+                />
+              </div>
+              <div className="form-group">
+                <label>Company Address</label>
+                <textarea
+                  name="companyAddress"
+                  value={formData.companyAddress}
+                  onChange={handleChange}
+                  placeholder="Enter company address"
+                ></textarea>
+              </div>
+              <div className="form-group">
+                <label>Office Phone Number</label>
+                <input
+                  type="number"
+                  name="officePhoneNumber"
+                  value={formData.officePhoneNumber}
+                  onChange={handleChange}
+                  placeholder="Office Phone Number"
+                />
+              </div>
+              <div className="form-group">
+                <label>City</label>
+                <input
+                  type="text"
+                  name="city"
+                  value={formData.city}
+                  onChange={handleChange}
+                  placeholder="Pune"
+                />
+              </div>
+              <div className="form-group">
+                <label>State</label>
+                <input
+                  type="text"
+                  name="state"
+                  value={formData.state}
+                  onChange={handleChange}
+                  placeholder="Maharashtra"
+                />
+              </div>
+              <div className="form-group">
+                <label>Postal Code</label>
+                <input
+                  type="text"
+                  name="postalCode"
+                  value={formData.postalCode}
+                  onChange={handleChange}
+                  placeholder="411005"
+                />
               </div>
             </div>
-          </div>
+          )}
+
+          <h3>
+            Additional Details
+            <button
+              type="button"
+              className="dropdown-toggle"
+              onClick={() => setShowAdditionalDetails(!showAdditionalDetails)}
+            >
+              {showAdditionalDetails ? "▲" : "▼"}
+            </button>
+          </h3>
+          <br />
+          {showAdditionalDetails && (
+            <div className="form-group-container">
+              <div className="form-group">
+                <label>Added By *</label>
+                <input
+                  type="text"
+                  name="addedBy"
+                  value={formData.addedBy}
+                  onChange={handleChange}
+                  placeholder="Enter your name"
+                  className={errors.addedBy ? "error" : ""}
+                  required
+                />
+                {errors.addedBy && <span className="error-message">{errors.addedBy}</span>}
+              </div>
+              <div className="form-group">
+                <label>Shipping Address</label>
+                <textarea
+                  name="shippingAddress"
+                  value={formData.shippingAddress}
+                  onChange={handleChange}
+                  placeholder="Enter shipping address"
+                ></textarea>
+              </div>
+              <div className="form-group">
+                <label>Note</label>
+                <textarea
+                  name="note"
+                  value={formData.note}
+                  onChange={handleChange}
+                  placeholder="Enter additional notes"
+                ></textarea>
+              </div>
+              <div className="form-group">
+                <label>Company Logo</label>
+                <div className="logo-upload">
+                  <input
+                    type="file"
+                    name="companyLogo"
+                    accept="image/*"
+                    onChange={handleChange}
+                  />
+                  {logoPreview && (
+                    <img src={logoPreview} alt="Company Logo Preview" className="image-preview" style={{ width: "200px", height: "200px" }} />
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="btn-container">
             <button type="submit" className="btn btn-primary">Save</button>

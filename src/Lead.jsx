@@ -87,9 +87,26 @@ const Lead = () => {
   );
 
   const handleViewDetails = (lead) => {
-    setSelectedLead(lead); // Set the selected leadm the API are passed here
+    setSelectedLead(lead); // Set the selected lead
     setIsDetailsPopupOpen(true); // Open the details popup
   };
+
+  const handleEditDetails = async () => {
+    try {
+        const response = await axios.put(
+            `http://localhost:5000/api/leads/${selectedLead.id}`,
+            selectedLead, // Send the selectedLead object as JSON
+            { headers: { "Content-Type": "application/json" } } // Ensure JSON content type
+        );
+        alert("Lead updated successfully.");
+        setLeads(leads.map((lead) => (lead.id === selectedLead.id ? response.data.lead : lead))); // Update state
+        setFilteredLeads(filteredLeads.map((lead) => (lead.id === selectedLead.id ? response.data.lead : lead))); // Update filtered list
+        setIsDetailsPopupOpen(false); // Close popup
+    } catch (error) {
+        console.error("Error updating lead:", error);
+        alert(error.response?.data?.error || "Failed to update lead. Please try again.");
+    }
+};
 
   const handleRemoveLead = async (leadId) => {
     try {
@@ -131,29 +148,180 @@ const Lead = () => {
     return (
       <div className="popup-overlay">
         <div className="popup-container">
-          <h2>Lead Details</h2>
-          <p><strong>Salutation:</strong> {selectedLead.salutation}</p>
-          <p><strong>Name:</strong> {selectedLead.name}</p>
-          <p><strong>Email:</strong> {selectedLead.email}</p>
-          <p><strong>Deal Name:</strong> {selectedLead.dealName}</p>
-          <p><strong>Pipeline:</strong> {selectedLead.pipeline}</p>
-          <p><strong>Deal Stage:</strong> {selectedLead.dealStage}</p>
-          <p><strong>Deal Value:</strong> {selectedLead.dealValue}</p>
-          <p><strong>Close Date:</strong> {selectedLead.closeDate}</p>
-          <p><strong>Product:</strong> {selectedLead.product}</p>
-          <p><strong>Company Name:</strong> {selectedLead.companyName}</p>
-          <p><strong>Website:</strong> {selectedLead.website}</p>
-          <p><strong>Mobile:</strong> {selectedLead.mobile}</p>
-          <p><strong>Office Phone:</strong> {selectedLead.officePhone}</p>
-          <p><strong>Country:</strong> {selectedLead.country}</p>
-          <p><strong>State:</strong> {selectedLead.state}</p>
-          <p><strong>City:</strong> {selectedLead.city}</p>
-          <p><strong>Postal Code:</strong> {selectedLead.postalCode}</p>
-          <p><strong>Address:</strong> {selectedLead.address}</p>
-          <p><strong>Lead Owner:</strong> {selectedLead.owner}</p>
-          <p><strong>Added By:</strong> {selectedLead.addedBy}</p>
-          <p><strong>Created:</strong> {selectedLead.created}</p>
-          <button className="btn" onClick={() => setIsDetailsPopupOpen(false)}>Close</button>
+          <h2>View & Edit Lead Details</h2>
+          <form>
+            <p>
+              <strong>Salutation:</strong>
+              <input
+                type="text"
+                value={selectedLead.salutation}
+                onChange={(e) => setSelectedLead({ ...selectedLead, salutation: e.target.value })}
+              />
+            </p>
+            <p>
+              <strong>Name:</strong>
+              <input
+                type="text"
+                value={selectedLead.name}
+                onChange={(e) => setSelectedLead({ ...selectedLead, name: e.target.value })}
+              />
+            </p>
+            <p>
+              <strong>Email:</strong>
+              <input
+                type="email"
+                value={selectedLead.email}
+                onChange={(e) => setSelectedLead({ ...selectedLead, email: e.target.value })}
+              />
+            </p>
+            <p>
+              <strong>Deal Name:</strong>
+              <input
+                type="text"
+                value={selectedLead.dealName}
+                onChange={(e) => setSelectedLead({ ...selectedLead, dealName: e.target.value })}
+              />
+            </p>
+            <p>
+              <strong>Pipeline:</strong>
+              <input
+                type="text"
+                value={selectedLead.pipeline}
+                onChange={(e) => setSelectedLead({ ...selectedLead, pipeline: e.target.value })}
+              />
+            </p>
+            <p>
+              <strong>Deal Stage:</strong>
+              <input
+                type="text"
+                value={selectedLead.dealStage}
+                onChange={(e) => setSelectedLead({ ...selectedLead, dealStage: e.target.value })}
+              />
+            </p>
+            <p>
+              <strong>Deal Value:</strong>
+              <input
+                type="number"
+                value={selectedLead.dealValue}
+                onChange={(e) => setSelectedLead({ ...selectedLead, dealValue: e.target.value })}
+              />
+            </p>
+            <p>
+              <strong>Close Date:</strong>
+              <input
+                type="date"
+                value={selectedLead.closeDate}
+                onChange={(e) => setSelectedLead({ ...selectedLead, closeDate: e.target.value })}
+              />
+            </p>
+            <p>
+              <strong>Product:</strong>
+              <input
+                type="text"
+                value={selectedLead.product}
+                onChange={(e) => setSelectedLead({ ...selectedLead, product: e.target.value })}
+              />
+            </p>
+            <p>
+              <strong>Company Name:</strong>
+              <input
+                type="text"
+                value={selectedLead.companyName}
+                onChange={(e) => setSelectedLead({ ...selectedLead, companyName: e.target.value })}
+              />
+            </p>
+            <p>
+              <strong>Website:</strong>
+              <input
+                type="text"
+                value={selectedLead.website}
+                onChange={(e) => setSelectedLead({ ...selectedLead, website: e.target.value })}
+              />
+            </p>
+            <p>
+              <strong>Mobile:</strong>
+              <input
+                type="text"
+                value={selectedLead.mobile}
+                onChange={(e) => setSelectedLead({ ...selectedLead, mobile: e.target.value })}
+              />
+            </p>
+            <p>
+              <strong>Office Phone:</strong>
+              <input
+                type="text"
+                value={selectedLead.officePhone}
+                onChange={(e) => setSelectedLead({ ...selectedLead, officePhone: e.target.value })}
+              />
+            </p>
+            <p>
+              <strong>Country:</strong>
+              <input
+                type="text"
+                value={selectedLead.country}
+                onChange={(e) => setSelectedLead({ ...selectedLead, country: e.target.value })}
+              />
+            </p>
+            <p>
+              <strong>State:</strong>
+              <input
+                type="text"
+                value={selectedLead.state}
+                onChange={(e) => setSelectedLead({ ...selectedLead, state: e.target.value })}
+              />
+            </p>
+            <p>
+              <strong>City:</strong>
+              <input
+                type="text"
+                value={selectedLead.city}
+                onChange={(e) => setSelectedLead({ ...selectedLead, city: e.target.value })}
+              />
+            </p>
+            <p>
+              <strong>Postal Code:</strong>
+              <input
+                type="text"
+                value={selectedLead.postalCode}
+                onChange={(e) => setSelectedLead({ ...selectedLead, postalCode: e.target.value })}
+              />
+            </p>
+            <p>
+              <strong>Address:</strong>
+              <textarea
+                value={selectedLead.address}
+                onChange={(e) => setSelectedLead({ ...selectedLead, address: e.target.value })}
+              ></textarea>
+            </p>
+            <p>
+              <strong>Lead Owner:</strong>
+              <input
+                type="text"
+                value={selectedLead.owner}
+                onChange={(e) => setSelectedLead({ ...selectedLead, owner: e.target.value })}
+              />
+            </p>
+            <p>
+              <strong>Added By:</strong>
+              <input
+                type="text"
+                value={selectedLead.addedBy}
+                onChange={(e) => setSelectedLead({ ...selectedLead, addedBy: e.target.value })}
+              />
+            </p>
+            <p>
+              <strong>Created:</strong>
+              <input
+                type="date"
+                value={selectedLead.created}
+                onChange={(e) => setSelectedLead({ ...selectedLead, created: e.target.value })}
+              />
+            </p>
+            <button type="button" className="btn btn-primary" onClick={handleEditDetails}>
+              Save Changes
+            </button>
+            <button className="btn" onClick={() => setIsDetailsPopupOpen(false)}>Close</button>
+          </form>
         </div>
       </div>
     );
@@ -191,7 +359,7 @@ const Lead = () => {
                     <ul className="dropdown-menu show">
                       <li>
                         <button className="dropdown-item" onClick={() => handleViewDetails(lead)}>
-                          👁 <strong>View</strong>
+                          👁    <strong>View & Edit </strong>
                         </button>
                       </li>
                       <li>
@@ -251,7 +419,7 @@ const Lead = () => {
             <FaPlus /> Add Lead Contact
           </button>
           <button className="btn btn-outline-secondary import-btn" onClick={handleExportLeads}>
-            ⬆ Import
+            ⬆ Export as pdf
           </button>
         </span>
       </div>

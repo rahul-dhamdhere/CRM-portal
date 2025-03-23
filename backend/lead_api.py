@@ -149,6 +149,45 @@ def add_lead():
         if conn:
             conn.close()
 
+# Update a lead
+@app.route('/api/leads/<lead_id>', methods=['PUT'])
+def update_lead(lead_id):
+    data = request.json  # Parse JSON data from the request
+
+    # Validate required fields
+    if not data.get("name"):
+        return jsonify({"error": "Name is required"}), 400
+
+    try:
+        conn = sqlite3.connect("leads.db", check_same_thread=False)
+        cursor = conn.cursor()
+
+        # Update the lead in the database
+        cursor.execute('''
+            UPDATE leads
+            SET salutation = ?, name = ?, email = ?, dealName = ?, pipeline = ?, dealStage = ?, dealValue = ?,
+                closeDate = ?, product = ?, companyName = ?, website = ?, mobile = ?, officePhone = ?, country = ?,
+                state = ?, city = ?, postalCode = ?, address = ?, owner = ?, addedBy = ?, created = ?
+            WHERE id = ?
+        ''', (
+            data.get("salutation"), data.get("name"), data.get("email"), data.get("dealName"), data.get("pipeline"),
+            data.get("dealStage"), data.get("dealValue"), data.get("closeDate"), data.get("product"),
+            data.get("companyName"), data.get("website"), data.get("mobile"), data.get("officePhone"),
+            data.get("country"), data.get("state"), data.get("city"), data.get("postalCode"), data.get("address"),
+            data.get("owner"), data.get("addedBy"), data.get("created"), lead_id
+        ))
+        conn.commit()
+
+        if cursor.rowcount == 0:
+            return jsonify({"error": "Lead not found"}), 404
+
+        return jsonify({"message": "Lead updated successfully", "lead": data}), 200
+    except sqlite3.Error as e:
+        return jsonify({"error": f"Database error: {str(e)}"}), 500
+    finally:
+        if conn:
+            conn.close()
+
 # Delete a lead
 @app.route('/api/leads/<lead_id>', methods=['DELETE'])
 def delete_lead(lead_id):

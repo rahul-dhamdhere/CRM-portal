@@ -117,6 +117,18 @@ h2 {
   display: none;
 }
 
+.dropdown-toggle {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: white;
+  margin-left: 10px;
+}
+
+.dropdown-toggle:hover {
+  color: #007bff;
+}
 
 /* Responsive Adjustments */
 @media (max-width: 1024px) {
