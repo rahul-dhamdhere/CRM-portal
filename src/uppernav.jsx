@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; 
+import React, { useState, useEffect } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 import './uppernav.css';
 import logo from './assets/stoicsalamander_logo.jpeg';
@@ -9,14 +9,52 @@ function UpperNav() {
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
-  const [notifications] = useState([
-    { id: 1, name: "Sahil Salunke", message: "have birthday 1 Mar", time: "1 day ago" },
-    { id: 2, name: "Arya Vilas Tandale", message: "have birthday 28 Feb", time: "2 days ago" },
-    { id: 3, name: "Tejas Ganesh Nikam", message: "and 1 other have a birthday on 25 Feb", time: "5 days ago" },
-    { id: 4, name: "Ashwini Subhash Narwade", message: "have birthday 22 Feb", time: "1 week ago" },
-    { id: 5, title: "Important Notice: New Update Published", message: "Office Closure on 24th & 25th Feb 2025 – Work from Home", time: "1 week ago" },
-    { id: 6, title: "Important Notice: New Update Published", message: "Reporting Process and Escalation Cycle", time: "1 week ago" }
-  ]);
+  const [notifications, setNotifications] = useState([]);
+
+  useEffect(() => {
+    // Fetch notifications from the backend API
+    fetch('http://127.0.0.1:5000/api/notifications')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch notifications');
+        }
+        return response.json();
+      })
+      .then((data) => setNotifications(data))
+      .catch((error) => {
+        console.error('Error fetching notifications:', error);
+        setNotifications([]); // Fallback to an empty array
+      });
+  }, []);
+
+  const markAsRead = () => {
+    fetch('http://127.0.0.1:5000/api/notifications/mark-as-read', {
+      method: 'POST',
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to mark notifications as read');
+        }
+        setNotifications([]); // Reset notifications
+      })
+      .catch((error) => {
+        console.error('Error marking notifications as read:', error);
+      });
+  };
+
+  const showAllNotifications = () => {
+    fetch('http://127.0.0.1:5000/api/notifications/all')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch all notifications');
+        }
+        return response.json();
+      })
+      .then((data) => setNotifications(data))
+      .catch((error) => {
+        console.error('Error fetching all notifications:', error);
+      });
+  };
 
   return (
     <div id="uppernav">
@@ -37,22 +75,27 @@ function UpperNav() {
             <div className="notif-header">
               <span>New notifications</span>
               <span className="notif-actions">
-                Mark as Read | Show All
+                <span onClick={markAsRead} style={{ cursor: 'pointer' }}>Mark as Read</span> | 
+                <span onClick={showAllNotifications} style={{ cursor: 'pointer' }}>Show All</span>
                 <span className="close-btn" onClick={() => setNotifOpen(false)}>✖</span>
               </span>
             </div>
             <div className="notif-list">
-              {notifications.map((notif) => (
-                <div key={notif.id} className="notif-item">
-                  <div className="notif-content">
-                    <strong>{notif.name || notif.title}</strong>
-                    <p>{notif.message}</p>
-                    <small>{notif.time}</small>
+              {notifications.length > 0 ? (
+                notifications.map((notif) => (
+                  <div key={notif.id} className="notif-item">
+                    <div className="notif-content">
+                      <strong>{notif.title}</strong>
+                      <p>{notif.message}</p>
+                      <small>{notif.time}</small>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <div className="notif-empty">No new notifications</div>
+              )}
             </div>
-            <div className="notif-footer">Show All</div>
+            <div className="notif-footer">Notification Panel</div>
           </div>
         )}
 

@@ -91,14 +91,15 @@ const AddClientContact = ({ isOpen, onClose, onAddClient }) => {
     clientData.append("name", formData.clientName);
     clientData.append("email", formData.email);
     clientData.append("phone", formData.mobile);
-    clientData.append("companyName", formData.companyName); // Include company name
-    clientData.append("companyAddress", formData.companyAddress); // Include company address
-    clientData.append("created_at", new Date().toISOString().split("T")[0]);
-    if (formData.profilePicture) clientData.append("profilePicture", formData.profilePicture);
-    if (formData.companyLogo) clientData.append("companyLogo", formData.companyLogo);
+    clientData.append("companyName", formData.companyName);
+    clientData.append("companyAddress", formData.companyAddress);
     clientData.append("salutation", formData.salutation);
-    clientData.append("profilePicture", formData.profilePicture);
-    clientData.append("companyLogo", formData.companyLogo);
+    clientData.append("gender", formData.gender);
+    clientData.append("language", formData.language);
+    clientData.append("clientCategory", formData.clientCategory);
+    clientData.append("clientSubCategory", formData.clientSubCategory);
+    clientData.append("loginAllowed", formData.loginAllowed);
+    clientData.append("emailNotifications", formData.emailNotifications);
     clientData.append("website", formData.website);
     clientData.append("taxName", formData.taxName);
     clientData.append("gstNumber", formData.gstNumber);
@@ -108,7 +109,9 @@ const AddClientContact = ({ isOpen, onClose, onAddClient }) => {
     clientData.append("postalCode", formData.postalCode);
     clientData.append("addedBy", formData.addedBy);
     clientData.append("shippingAddress", formData.shippingAddress);
-    clientData.append("note", formData.note); // Include note field
+    clientData.append("note", formData.note);
+    if (formData.profilePicture) clientData.append("profilePicture", formData.profilePicture);
+    if (formData.companyLogo) clientData.append("companyLogo", formData.companyLogo);
 
     try {
         const response = await axios.post("http://localhost:5000/api/clients", clientData, {
@@ -120,7 +123,7 @@ const AddClientContact = ({ isOpen, onClose, onAddClient }) => {
         onAddClient(response.data.client); // Notify parent component about the new client
         onClose(); // Close the popup
     } catch (error) {
-        console.error("Error saving client:", error.response || error); // Log the full error response
+        console.error("Error saving client:", error.response || error);
         alert(error.response?.data?.error || "Failed to save client.");
     }
 };

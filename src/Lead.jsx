@@ -19,7 +19,7 @@ const Lead = () => {
   useEffect(() => {
     const fetchLeads = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/leads");
+        const response = await axios.get("http://localhost:5000/api/leads"); // Ensure endpoint matches main.py
         setLeads(response.data);
         setFilteredLeads(response.data); // Initialize filtered leads
       } catch (err) {
@@ -93,30 +93,44 @@ const Lead = () => {
 
   const handleEditDetails = async () => {
     try {
-        const response = await axios.put(
-            `http://localhost:5000/api/leads/${selectedLead.id}`,
-            selectedLead, // Send the selectedLead object as JSON
-            { headers: { "Content-Type": "application/json" } } // Ensure JSON content type
-        );
-        alert("Lead updated successfully.");
-        setLeads(leads.map((lead) => (lead.id === selectedLead.id ? response.data.lead : lead))); // Update state
-        setFilteredLeads(filteredLeads.map((lead) => (lead.id === selectedLead.id ? response.data.lead : lead))); // Update filtered list
-        setIsDetailsPopupOpen(false); // Close popup
+      const response = await axios.put(
+        `http://localhost:5000/api/leads/${selectedLead.id}`,
+        selectedLead,
+        { headers: { "Content-Type": "application/json" } }
+      );
+      alert(response.data.message || "Lead updated successfully.");
+      setLeads(leads.map((lead) => (lead.id === selectedLead.id ? response.data.lead : lead)));
+      setFilteredLeads(filteredLeads.map((lead) => (lead.id === selectedLead.id ? response.data.lead : lead)));
+      setIsDetailsPopupOpen(false);
+
+      // Notify backend about the edit
+      await axios.post("http://localhost:5000/api/notifications", {
+        title: "Lead Edited",
+        message: `Lead ${selectedLead.name} has been updated.`,
+        time: new Date().toLocaleString(),
+      });
     } catch (error) {
-        console.error("Error updating lead:", error);
-        alert(error.response?.data?.error || "Failed to update lead. Please try again.");
+      console.error("Error updating lead:", error.response || error);
+      alert(error.response?.data?.error || "Failed to update lead. Please try again.");
     }
-};
+  };
 
   const handleRemoveLead = async (leadId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/leads/${leadId}`);
-      setLeads(leads.filter((lead) => lead.id !== leadId)); // Remove lead from state
-      setFilteredLeads(filteredLeads.filter((lead) => lead.id !== leadId)); // Update filtered leads
-      alert("Lead removed successfully.");
+      const response = await axios.delete(`http://localhost:5000/api/leads/${leadId}`);
+      alert(response.data.message || "Lead removed successfully.");
+      setLeads(leads.filter((lead) => lead.id !== leadId));
+      setFilteredLeads(filteredLeads.filter((lead) => lead.id !== leadId));
+
+      // Notify backend about the removal
+      await axios.post("http://localhost:5000/api/notifications", {
+        title: "Lead Removed",
+        message: `A lead has been removed.`,
+        time: new Date().toLocaleString(),
+      });
     } catch (error) {
-      console.error("Error removing lead:", error);
-      alert("Failed to remove lead. Please try again.");
+      console.error("Error removing lead:", error.response || error);
+      alert(error.response?.data?.error || "Failed to remove lead. Please try again.");
     }
   };
 

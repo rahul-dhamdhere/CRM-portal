@@ -23,7 +23,7 @@ const Client = () => {
 
   const fetchClients = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/clients");
+      const response = await axios.get("http://localhost:5000/api/clients"); // Ensure endpoint matches main.py
       console.log("API Response:", response.data);
       setClients(response.data);
       setFilteredClients(response.data);
@@ -101,32 +101,28 @@ const Client = () => {
   };
 
   const handleEditDetails = async () => {
-    // Validate required fields
-    if (!selectedClient.name) {
-        alert("Client name is required.");
-        return;
-    }
-    if (!selectedClient.phone || !/^\d{10}$/.test(selectedClient.phone)) {
-        alert("Phone number is required and must be a valid 10-digit number.");
-        return;
-    }
-
     try {
-        const response = await axios.put(
-            `http://localhost:5000/api/clients/${selectedClient.id}`,
-            selectedClient, // Send the updated object to the backend
-            { headers: { "Content-Type": "application/json" } }
-        );
-        alert("Client updated successfully.");
-        // Update the local state with the updated client data
-        setClients(clients.map((client) => (client.id === selectedClient.id ? response.data.client : client)));
-        setFilteredClients(filteredClients.map((client) => (client.id === selectedClient.id ? response.data.client : client)));
-        setIsDetailsPopupOpen(false); // Close the popup
+      const response = await axios.put(
+        `http://localhost:5000/api/clients/${selectedClient.id}`,
+        selectedClient,
+        { headers: { "Content-Type": "application/json" } }
+      );
+      alert(response.data.message);
+      setClients(clients.map((client) => (client.id === selectedClient.id ? response.data.client : client)));
+      setFilteredClients(filteredClients.map((client) => (client.id === selectedClient.id ? response.data.client : client)));
+      setIsDetailsPopupOpen(false);
+
+      // Notify backend about the edit
+      await axios.post("http://localhost:5000/api/notifications", {
+        title: "Client Edited",
+        message: `Client ${selectedClient.name} has been updated.`,
+        time: new Date().toLocaleString(),
+      });
     } catch (error) {
-        console.error("Error updating client:", error);
-        alert(error.response?.data?.error || "Failed to update client. Please try again.");
+      console.error("Error updating client:", error.response || error);
+      alert(error.response?.data?.error || "Failed to update client. Please try again.");
     }
-};
+  };
 
   const handleRemoveClient = async (clientId) => {
     try {
@@ -134,6 +130,13 @@ const Client = () => {
       setClients(clients.filter((client) => client.id !== clientId));
       setFilteredClients(filteredClients.filter((client) => client.id !== clientId));
       alert("Client removed successfully.");
+
+      // Notify backend about the removal
+      await axios.post("http://localhost:5000/api/notifications", {
+        title: "Client Removed",
+        message: `A client has been removed.`,
+        time: new Date().toLocaleString(),
+      });
     } catch (error) {
       console.error("Error removing client:", error);
       alert("Failed to remove client. Please try again.");

@@ -77,7 +77,7 @@ const AddLeadContact = ({ isOpen, onClose, onAddLead }) => {
       city: formData.city,
       postalCode: formData.postalCode,
       address: formData.address,
-      leadOwner: "Sahil Deshpande", // Hardcoded value
+      owner: "Rahul Dhamdhere", // Hardcoded value
       addedBy: "Admin", // Example value
       created: new Date().toISOString().split("T")[0], // Current date in YYYY-MM-DD
     };
@@ -86,8 +86,16 @@ const AddLeadContact = ({ isOpen, onClose, onAddLead }) => {
       const response = await axios.post("http://localhost:5000/api/leads", leadData);
       alert(response.data.message);
       onAddLead(response.data.lead); // Notify parent component about the new lead
+
+      // Send a notification to the backend
+      await axios.post("http://localhost:5000/api/notifications", {
+        title: "New Lead Added",
+        message: `Lead ${formData.name} has been added.`,
+        time: new Date().toLocaleString(),
+      });
+
       onClose(); // Close the popup
-      setFormData({ // Reset form data
+      setFormData({
         salutation: "",
         name: "",
         email: "",
@@ -108,7 +116,7 @@ const AddLeadContact = ({ isOpen, onClose, onAddLead }) => {
         address: "",
       });
     } catch (error) {
-      console.error("Error saving lead:", error);
+      console.error("Error saving lead:", error.response || error);
       alert(error.response?.data?.error || "Failed to save lead.");
     }
   };

@@ -88,8 +88,63 @@ def init_lead_db():
         if conn:
             conn.close()
 
+def init_notifications_db():
+    conn = sqlite3.connect('notifications.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS notifications (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            message TEXT NOT NULL,
+            time TEXT NOT NULL
+        )
+    ''')
+    conn.commit()
+
+    # Insert default notifications if the table is empty
+    cursor.execute('SELECT COUNT(*) FROM notifications')
+    if cursor.fetchone()[0] == 0:
+        default_notifications = [
+            {"title": "Sahil Salunke", "message": "has a birthday on 1 Mar", "time": "1 day ago"},
+            {"title": "Arya Vilas Tandale", "message": "has a birthday on 28 Feb", "time": "2 days ago"},
+            {"title": "Tejas Ganesh Nikam", "message": "and 1 other have a birthday on 25 Feb", "time": "5 days ago"},
+            {"title": "Ashwini Subhash Narwade", "message": "has a birthday on 22 Feb", "time": "1 week ago"},
+            {"title": "Important Notice: New Update Published", "message": "Office Closure on 24th & 25th Feb 2025 – Work from Home", "time": "1 week ago"},
+            {"title": "Important Notice: New Update Published", "message": "Reporting Process and Escalation Cycle", "time": "1 week ago"}
+        ]
+        cursor.executemany(
+            'INSERT INTO notifications (title, message, time) VALUES (?, ?, ?)',
+            [(notif["title"], notif["message"], notif["time"]) for notif in default_notifications]
+        )
+        conn.commit()
+
+    conn.close()
+
+def init_archived_notifications_db():
+    conn = sqlite3.connect('notifications.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS archived_notifications (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            message TEXT NOT NULL,
+            time TEXT NOT NULL
+        )
+    ''')
+    conn.commit()
+    conn.close()
+
+def add_notification(title, message, time):
+    conn = sqlite3.connect('notifications.db')
+    cursor = conn.cursor()
+    cursor.execute('INSERT INTO notifications (title, message, time) VALUES (?, ?, ?)', (title, message, time))
+    conn.commit()
+    conn.close()
+
 init_client_db()
 init_lead_db()
+init_notifications_db()
+init_archived_notifications_db()
 
 # Client API Routes
 @app.route('/api/clients', methods=['GET'])
@@ -149,11 +204,11 @@ def add_client():
         company_logo_path = None
 
         if profile_picture:
-            profile_picture_path = f"./uploads/{profile_picture.filename}"
+            profile_picture_path = os.path.join(UPLOAD_DIR, profile_picture.filename)
             profile_picture.save(profile_picture_path)
 
         if company_logo:
-            company_logo_path = f"./uploads/{company_logo.filename}"
+            company_logo_path = os.path.join(UPLOAD_DIR, company_logo.filename)
             company_logo.save(company_logo_path)
 
         conn = sqlite3.connect("crm.db", check_same_thread=False)
@@ -171,7 +226,7 @@ def add_client():
             data.get('note'), company_logo_path
         ))
         conn.commit()
-        return jsonify({"message": "Client added successfully", "id": client_id}), 201
+        return jsonify({"message": "Client added successfully", "client": {"id": client_id, **data}}), 201
     except sqlite3.Error as e:
         return jsonify({"error": f"Database error: {str(e)}"}), 500
     except KeyError as e:
@@ -183,23 +238,26 @@ def add_client():
 @app.route('/api/clients/<client_id>', methods=['PUT'])
 def update_client(client_id):
     try:
-        data = request.get_json()
+        data = request.json
         conn = sqlite3.connect("crm.db", check_same_thread=False)
         cursor = conn.cursor()
         cursor.execute('''UPDATE clients SET
-            salutation = ?, name = ?, email = ?, phone = ?, gender = ?, language = ?, client_category = ?, client_sub_category = ?,
-            login_allowed = ?, email_notifications = ?, profile_picture = ?, company_name = ?, website = ?, tax_name = ?, gst_number = ?,
-            company_address = ?, office_phone_number = ?, city = ?, state = ?, postal_code = ?, added_by = ?, shipping_address = ?,
-            note = ?, company_logo = ?
+            salutation = ?, name = ?, email = ?, phone = ?, gender = ?, language = ?, client_category = ?, 
+            client_sub_category = ?, login_allowed = ?, email_notifications = ?, company_name = ?, website = ?, 
+            tax_name = ?, gst_number = ?, company_address = ?, office_phone_number = ?, city = ?, state = ?, 
+            postal_code = ?, added_by = ?, shipping_address = ?, note = ?
             WHERE id = ?''', (
-            data.get('salutation'), data['name'], data.get('email'), data.get('phone'), data.get('gender'), data.get('language'),
-            data.get('client_category'), data.get('client_sub_category'), data.get('login_allowed'), data.get('email_notifications'),
-            data.get('profile_picture'), data.get('company_name'), data.get('website'), data.get('tax_name'), data.get('gst_number'),
-            data.get('company_address'), data.get('office_phone_number'), data.get('city'), data.get('state'), data.get('postal_code'),
-            data.get('added_by'), data.get('shipping_address'), data.get('note'), data.get('company_logo'), client_id
+            data.get('salutation'), data['name'], data.get('email'), data.get('phone'), data.get('gender'),
+            data.get('language'), data.get('client_category'), data.get('client_sub_category'),
+            data.get('login_allowed'), data.get('email_notifications'), data.get('company_name'),
+            data.get('website'), data.get('tax_name'), data.get('gst_number'), data.get('company_address'),
+            data.get('office_phone_number'), data.get('city'), data.get('state'), data.get('postal_code'),
+            data.get('added_by'), data.get('shipping_address'), data.get('note'), client_id
         ))
+        if cursor.rowcount == 0:
+            return jsonify({"error": "Client not found"}), 404
         conn.commit()
-        return jsonify({"message": "Client updated successfully"})
+        return jsonify({"message": "Client updated successfully", "client": data}), 200
     except sqlite3.Error as e:
         return jsonify({"error": f"Database error: {str(e)}"}), 500
     finally:
@@ -212,8 +270,10 @@ def delete_client(client_id):
         conn = sqlite3.connect("crm.db", check_same_thread=False)
         cursor = conn.cursor()
         cursor.execute("DELETE FROM clients WHERE id = ?", (client_id,))
+        if cursor.rowcount == 0:
+            return jsonify({"error": "Client not found"}), 404
         conn.commit()
-        return jsonify({"message": "Client deleted successfully"})
+        return jsonify({"message": "Client deleted successfully"}), 200
     except sqlite3.Error as e:
         return jsonify({"error": f"Database error: {str(e)}"}), 500
     finally:
@@ -222,36 +282,8 @@ def delete_client(client_id):
 
 @app.route('/api/clients/export', methods=['GET'])
 def export_clients():
-    try:
-        conn = sqlite3.connect("crm.db", check_same_thread=False)
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM clients")
-        clients = cursor.fetchall()
-
-        pdf = FPDF()
-        pdf.add_page()
-        pdf.set_font("Arial", size=12)
-
-        for client in clients:
-            pdf.cell(200, 10, txt=str(client), ln=True)
-
-        pdf_output = "clients_export.pdf"
-        pdf.output(pdf_output)
-
-        @after_this_request
-        def cleanup(response):
-            try:
-                os.remove(pdf_output)
-            except Exception as e:
-                print(f"Error cleaning up file: {e}")
-            return response
-
-        return send_file(pdf_output, as_attachment=True)
-    except sqlite3.Error as e:
-        return jsonify({"error": f"Database error: {str(e)}"}), 500
-    finally:
-        if conn:
-            conn.close()
+    # ...existing code from combined_api.py...
+    pass
 
 # Lead API Routes
 @app.route('/api/leads', methods=['GET'])
@@ -301,9 +333,9 @@ def add_lead():
         lead_id = str(uuid.uuid4())
 
         # Validate required fields
-        required_fields = ["name", "owner", "addedBy", "created"]
+        required_fields = ["name", "dealName", "pipeline", "dealStage", "dealValue", "closeDate", "owner", "addedBy", "created"]
         for field in required_fields:
-            if field not in data:
+            if not data.get(field):
                 return jsonify({"error": f"Missing required field: {field}"}), 400
 
         conn = sqlite3.connect("leads.db", check_same_thread=False)
@@ -313,14 +345,43 @@ def add_lead():
             companyName, website, mobile, officePhone, country, state, city, postalCode, address, owner,
             addedBy, created
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', (
-            lead_id, data.get('salutation'), data['name'], data.get('email'), data.get('dealName'),
-            data.get('pipeline'), data.get('dealStage'), data.get('dealValue'), data.get('closeDate'),
+            lead_id, data.get('salutation'), data['name'], data.get('email'), data['dealName'],
+            data['pipeline'], data['dealStage'], data['dealValue'], data['closeDate'],
             data.get('product'), data.get('companyName'), data.get('website'), data.get('mobile'),
             data.get('officePhone'), data.get('country'), data.get('state'), data.get('city'),
             data.get('postalCode'), data.get('address'), data['owner'], data['addedBy'], data['created']
         ))
         conn.commit()
-        return jsonify({"message": "Lead added successfully", "id": lead_id}), 201
+        return jsonify({"message": "Lead added successfully", "lead": {"id": lead_id, **data}}), 201
+    except sqlite3.Error as e:
+        return jsonify({"error": f"Database error: {str(e)}"}), 500
+    except KeyError as e:
+        return jsonify({"error": f"Missing required field: {str(e)}"}), 400
+    finally:
+        if conn:
+            conn.close()
+
+@app.route('/api/leads/<lead_id>', methods=['PUT'])
+def update_lead(lead_id):
+    try:
+        data = request.json
+        conn = sqlite3.connect("leads.db", check_same_thread=False)
+        cursor = conn.cursor()
+        cursor.execute('''UPDATE leads SET
+            salutation = ?, name = ?, email = ?, dealName = ?, pipeline = ?, dealStage = ?, dealValue = ?, 
+            closeDate = ?, product = ?, companyName = ?, website = ?, mobile = ?, officePhone = ?, country = ?, 
+            state = ?, city = ?, postalCode = ?, address = ?, owner = ?, addedBy = ?, created = ?
+            WHERE id = ?''', (
+            data.get('salutation'), data['name'], data.get('email'), data['dealName'], data['pipeline'],
+            data['dealStage'], data['dealValue'], data['closeDate'], data.get('product'), data.get('companyName'),
+            data.get('website'), data.get('mobile'), data.get('officePhone'), data.get('country'), data.get('state'),
+            data.get('city'), data.get('postalCode'), data.get('address'), data['owner'], data['addedBy'],
+            data['created'], lead_id
+        ))
+        if cursor.rowcount == 0:
+            return jsonify({"error": "Lead not found"}), 404
+        conn.commit()
+        return jsonify({"message": "Lead updated successfully", "lead": data}), 200
     except sqlite3.Error as e:
         return jsonify({"error": f"Database error: {str(e)}"}), 500
     finally:
@@ -333,8 +394,10 @@ def delete_lead(lead_id):
         conn = sqlite3.connect("leads.db", check_same_thread=False)
         cursor = conn.cursor()
         cursor.execute("DELETE FROM leads WHERE id = ?", (lead_id,))
+        if cursor.rowcount == 0:
+            return jsonify({"error": "Lead not found"}), 404
         conn.commit()
-        return jsonify({"message": "Lead deleted successfully"})
+        return jsonify({"message": "Lead deleted successfully"}), 200
     except sqlite3.Error as e:
         return jsonify({"error": f"Database error: {str(e)}"}), 500
     finally:
@@ -343,31 +406,53 @@ def delete_lead(lead_id):
 
 @app.route('/api/leads/export', methods=['GET'])
 def export_leads():
+    # ...existing code from combined_api.py...
+    pass
+
+# Notifications API Routes
+@app.route('/api/notifications', methods=['GET'])
+def get_notifications():
+    conn = sqlite3.connect('notifications.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT id, title, message, time FROM notifications ORDER BY id DESC')
+    notifications = [{'id': row[0], 'title': row[1], 'message': row[2], 'time': row[3]} for row in cursor.fetchall()]
+    conn.close()
+    return jsonify(notifications)
+
+@app.route('/api/notifications', methods=['POST'])
+def create_notification():
+    data = request.json
+    title = data.get('title')
+    message = data.get('message')
+    time = data.get('time')
+    add_notification(title, message, time)
+    return jsonify({'message': 'Notification added successfully'}), 201
+
+@app.route('/api/notifications/mark-as-read', methods=['POST'])
+def mark_notifications_as_read():
     try:
-        conn = sqlite3.connect("leads.db", check_same_thread=False)
+        conn = sqlite3.connect('notifications.db')
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM leads")
-        leads = cursor.fetchall()
+        # Move notifications to the archived table
+        cursor.execute('INSERT INTO archived_notifications SELECT * FROM notifications')
+        cursor.execute('DELETE FROM notifications')  # Clear current notifications
+        conn.commit()
+        return jsonify({'message': 'All notifications marked as read'}), 200
+    except sqlite3.Error as e:
+        return jsonify({"error": f"Database error: {str(e)}"}), 500
+    finally:
+        if conn:
+            conn.close()
 
-        pdf = FPDF()
-        pdf.add_page()
-        pdf.set_font("Arial", size=12)
-
-        for lead in leads:
-            pdf.cell(200, 10, txt=str(lead), ln=True)
-
-        pdf_output = "leads_export.pdf"
-        pdf.output(pdf_output)
-
-        @after_this_request
-        def cleanup(response):
-            try:
-                os.remove(pdf_output)
-            except Exception as e:
-                print(f"Error cleaning up file: {e}")
-            return response
-
-        return send_file(pdf_output, as_attachment=True)
+@app.route('/api/notifications/all', methods=['GET'])
+def get_all_notifications():
+    try:
+        conn = sqlite3.connect('notifications.db')
+        cursor = conn.cursor()
+        # Fetch both current and archived notifications
+        cursor.execute('SELECT id, title, message, time FROM notifications UNION ALL SELECT id, title, message, time FROM archived_notifications ORDER BY id DESC')
+        notifications = [{'id': row[0], 'title': row[1], 'message': row[2], 'time': row[3]} for row in cursor.fetchall()]
+        return jsonify(notifications)
     except sqlite3.Error as e:
         return jsonify({"error": f"Database error: {str(e)}"}), 500
     finally:
@@ -377,11 +462,13 @@ def export_leads():
 # Error Handlers
 @app.errorhandler(404)
 def not_found(error):
-    return jsonify({"error": "Resource not found"}), 404
+    # ...existing code from combined_api.py...
+    pass
 
 @app.errorhandler(500)
 def internal_server_error(error):
-    return jsonify({"error": "Internal server error"}), 500
+    # ...existing code from combined_api.py...
+    pass
 
 if __name__ == '__main__':
     app.run(debug=True)
