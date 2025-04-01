@@ -168,7 +168,7 @@ const AddLeadContact = ({ isOpen, onClose, onAddLead }) => {
           <div className="form-grid">
             <div className="form-group">
               <label>Lead Owner</label>
-              <input type="text" value="Sahil Deshpande" disabled />
+              <input type="text" value="Rahul Dhamdhere" disabled />
             </div>
             <div className="form-group">
               <label>Deal Name *</label>

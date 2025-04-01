@@ -3,7 +3,7 @@ from flask_cors import CORS
 import sqlite3
 import uuid
 from datetime import datetime
-from fpdf import FPDF
+from werkzeug.security import generate_password_hash, check_password_hash
 import os
 
 app = Flask(__name__)
@@ -105,11 +105,7 @@ def init_notifications_db():
     cursor.execute('SELECT COUNT(*) FROM notifications')
     if cursor.fetchone()[0] == 0:
         default_notifications = [
-            {"title": "Sahil Salunke", "message": "has a birthday on 1 Mar", "time": "1 day ago"},
-            {"title": "Arya Vilas Tandale", "message": "has a birthday on 28 Feb", "time": "2 days ago"},
-            {"title": "Tejas Ganesh Nikam", "message": "and 1 other have a birthday on 25 Feb", "time": "5 days ago"},
-            {"title": "Ashwini Subhash Narwade", "message": "has a birthday on 22 Feb", "time": "1 week ago"},
-            {"title": "Important Notice: New Update Published", "message": "Office Closure on 24th & 25th Feb 2025 – Work from Home", "time": "1 week ago"},
+        
             {"title": "Important Notice: New Update Published", "message": "Reporting Process and Escalation Cycle", "time": "1 week ago"}
         ]
         cursor.executemany(
@@ -141,10 +137,85 @@ def add_notification(title, message, time):
     conn.commit()
     conn.close()
 
+def init_auth_db():
+    try:
+        conn = sqlite3.connect("auth_system.db", check_same_thread=False)
+        cursor = conn.cursor()
+        cursor.execute('''CREATE TABLE IF NOT EXISTS members (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            companyName TEXT NOT NULL,
+            name TEXT NOT NULL,
+            email TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL
+        )''')
+        conn.commit()
+    except sqlite3.Error as e:
+        print(f"Auth DB initialization error: {e}")
+    finally:
+        if conn:
+            conn.close()
+
 init_client_db()
 init_lead_db()
 init_notifications_db()
 init_archived_notifications_db()
+init_auth_db()
+
+# Authentication Routes
+@app.route('/auth/signup', methods=['POST'])
+def signup():
+    data = request.json
+    companyName = data.get('companyName')
+    name = data.get('name')
+    email = data.get('email')
+    password = data.get('password')
+
+    # Hash the password before storing it
+    hashed_password = generate_password_hash(password)
+
+    try:
+        conn = sqlite3.connect("auth_system.db", check_same_thread=False)
+        cursor = conn.cursor()
+        sql = "INSERT INTO members (companyName, name, email, password) VALUES (?, ?, ?, ?)"
+        cursor.execute(sql, (companyName, name, email, hashed_password))
+        conn.commit()
+        return jsonify({'message': 'Signup successful!'}), 201
+    except sqlite3.IntegrityError:
+        return jsonify({'error': 'Email already exists.'}), 400
+    except sqlite3.Error as e:
+        return jsonify({'error': f"Database error: {str(e)}"}), 500
+    finally:
+        if conn:
+            conn.close()
+
+@app.route('/auth/login', methods=['POST'])
+def login():
+    data = request.json
+    email = data.get('email')
+    password = data.get('password')
+
+    try:
+        conn = sqlite3.connect("auth_system.db", check_same_thread=False)
+        cursor = conn.cursor()
+        sql = "SELECT password FROM members WHERE email = ?"
+        cursor.execute(sql, (email,))
+        result = cursor.fetchone()
+
+        if result:
+            stored_password = result[0]
+
+            # Verify the hashed password
+            if check_password_hash(stored_password, password):
+                return jsonify({'message': 'Login successful!'}), 200
+            else:
+                return jsonify({'error': 'Invalid credentials.'}), 401
+
+        return jsonify({'error': 'User not found.'}), 404
+    except sqlite3.Error as e:
+        return jsonify({'error': f"Database error: {str(e)}"}), 500
+    finally:
+        if conn:
+            conn.close()
 
 # Client API Routes
 @app.route('/api/clients', methods=['GET'])
@@ -226,7 +297,7 @@ def add_client():
             data.get('note'), company_logo_path
         ))
         conn.commit()
-        return jsonify({"message": "Client added successfully", "client": {"id": client_id, **data}}), 201
+        return jsonify({"message": "Client added successfully & please refresh the page to see notification", "client": {"id": client_id, **data}}), 201
     except sqlite3.Error as e:
         return jsonify({"error": f"Database error: {str(e)}"}), 500
     except KeyError as e:
@@ -352,7 +423,7 @@ def add_lead():
             data.get('postalCode'), data.get('address'), data['owner'], data['addedBy'], data['created']
         ))
         conn.commit()
-        return jsonify({"message": "Lead added successfully", "lead": {"id": lead_id, **data}}), 201
+        return jsonify({"message": "Lead added successfully & please refresh the page to see notification", "lead": {"id": lead_id, **data}}), 201
     except sqlite3.Error as e:
         return jsonify({"error": f"Database error: {str(e)}"}), 500
     except KeyError as e:
