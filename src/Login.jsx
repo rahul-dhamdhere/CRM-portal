@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "./Auth.css";
 
@@ -10,20 +9,11 @@ const Login = () => {
   const navigate = useNavigate(); // Hook for navigation
 
   const handleLogin = async () => {
-    try {
-      const response = await axios.post("http://localhost:5000/auth/login", {
-        email,
-        password,
-      });
-
-      if (response.data.message) {
-        alert("Login Successful!");
-        navigate("/"); // Redirect to the dashboard
-      } else {
-        setError(response.data.error || "Login failed.");
-      }
-    } catch (error) {
-      setError(error.response?.data?.error || "Invalid credentials. Please try again.");
+    if (email === "test@example.com" && password === "password") {
+      alert("Login Successful! This is a frontend-only demo.");
+      navigate("/"); // Redirect to the dashboard
+    } else {
+      setError("Invalid credentials. Please try again.");
     }
   };
 

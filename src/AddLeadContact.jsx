@@ -55,70 +55,16 @@ const AddLeadContact = ({ isOpen, onClose, onAddLead }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!validateForm()) return;
-
-    const leadData = {
-      salutation: formData.salutation,
+    const newLead = {
+      id: Date.now(),
       name: formData.name,
-      email: formData.email,
-      dealName: formData.dealName,
-      pipeline: formData.pipeline,
-      dealStage: formData.dealStage,
-      dealValue: formData.dealValue,
-      closeDate: formData.closeDate,
-      product: formData.product,
-      companyName: formData.companyName,
-      website: formData.website,
-      mobile: formData.mobile,
-      officePhone: formData.officePhone,
-      country: formData.country,
-      state: formData.state,
-      city: formData.city,
-      postalCode: formData.postalCode,
-      address: formData.address,
-      owner: "Rahul Dhamdhere", // Hardcoded value
-      addedBy: "Admin", // Example value
-      created: new Date().toISOString().split("T")[0], // Current date in YYYY-MM-DD
+      owner: "Rahul Dhamdhere", // Example owner
+      addedBy: "Sahil Deshpande", // Example addedBy
+      created: new Date().toISOString().split("T")[0], // Current date
     };
-
-    try {
-      const response = await axios.post("http://localhost:5000/api/leads", leadData);
-      alert(response.data.message);
-      onAddLead(response.data.lead); // Notify parent component about the new lead
-
-      // Send a notification to the backend
-      await axios.post("http://localhost:5000/api/notifications", {
-        title: "New Lead Added",
-        message: `Lead ${formData.name} has been added.`,
-        time: new Date().toLocaleString(),
-      });
-
-      onClose(); // Close the popup
-      setFormData({
-        salutation: "",
-        name: "",
-        email: "",
-        dealName: "",
-        pipeline: "Sales Pipeline",
-        dealStage: "Generated",
-        dealValue: "",
-        closeDate: "",
-        product: "",
-        companyName: "",
-        website: "",
-        mobile: "",
-        officePhone: "",
-        country: "",
-        state: "",
-        city: "",
-        postalCode: "",
-        address: "",
-      });
-    } catch (error) {
-      console.error("Error saving lead:", error.response || error);
-      alert(error.response?.data?.error || "Failed to save lead.");
-    }
+    onAddLead(newLead); // Pass the new lead to the parent component
+    onClose();
   };
 
   return (

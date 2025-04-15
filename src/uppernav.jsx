@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; 
+import React, { useState } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 import './uppernav.css';
 import logo from './assets/stoicsalamander_logo.jpeg';
@@ -9,51 +9,17 @@ function UpperNav() {
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
-  const [notifications, setNotifications] = useState([]);
-
-  useEffect(() => {
-    // Fetch notifications from the backend API
-    fetch('http://127.0.0.1:5000/api/notifications')
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Failed to fetch notifications');
-        }
-        return response.json();
-      })
-      .then((data) => setNotifications(data))
-      .catch((error) => {
-        console.error('Error fetching notifications:', error);
-        setNotifications([]); // Fallback to an empty array
-      });
-  }, []);
+  const [notifications, setNotifications] = useState([
+    { id: 1, title: 'Welcome', message: 'Welcome to the CRM Portal!', time: 'Just now' },
+    { id: 2, title: 'Reminder', message: 'Don’t forget to update your profile.', time: '1 hour ago' },
+  ]);
 
   const markAsRead = () => {
-    fetch('http://127.0.0.1:5000/api/notifications/mark-as-read', {
-      method: 'POST',
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Failed to mark notifications as read');
-        }
-        setNotifications([]); // Reset notifications
-      })
-      .catch((error) => {
-        console.error('Error marking notifications as read:', error);
-      });
+    setNotifications([]); // Clear notifications
   };
 
   const showAllNotifications = () => {
-    fetch('http://127.0.0.1:5000/api/notifications/all')
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Failed to fetch all notifications');
-        }
-        return response.json();
-      })
-      .then((data) => setNotifications(data))
-      .catch((error) => {
-        console.error('Error fetching all notifications:', error);
-      });
+    alert('This is a frontend-only demo. No additional notifications available.');
   };
 
   return (

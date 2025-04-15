@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import "./Client.css";
 import { FaSearch, FaFilter, FaPlus, FaEllipsisV } from "react-icons/fa";
 import AddClientContact from "./AddClientContact";
@@ -9,31 +8,36 @@ const Client = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [clients, setClients] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredClients, setFilteredClients] = useState([]);
   const [selectedClient, setSelectedClient] = useState(null);
   const [isDetailsPopupOpen, setIsDetailsPopupOpen] = useState(false);
 
-  // Fetch clients from the API
-  useEffect(() => {
-    fetchClients();
-  }, []);
+  // Mock data for clients
+  const mockClients = [
+    {
+      id: 1,
+      name: "John Doe",
+      email: "john.doe@example.com",
+      phone: "1234567890",
+      company_name: "Doe Enterprises",
+      company_address: "123 Main St, Springfield",
+    },
+    {
+      id: 2,
+      name: "Jane Smith",
+      email: "jane.smith@example.com",
+      phone: "9876543210",
+      company_name: "Smith Co.",
+      company_address: "456 Elm St, Metropolis",
+    },
+  ];
 
-  const fetchClients = async () => {
-    try {
-      const response = await axios.get("http://localhost:5000/api/clients"); // Ensure endpoint matches main.py
-      console.log("API Response:", response.data);
-      setClients(response.data);
-      setFilteredClients(response.data);
-    } catch (error) {
-      console.error("Error fetching clients:", error.response || error);
-      setError("Failed to load clients. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    // Simulate fetching clients
+    setClients(mockClients);
+    setFilteredClients(mockClients);
+  }, []);
 
   // Filter clients based on search query
   useEffect(() => {
@@ -56,17 +60,6 @@ const Client = () => {
   const toggleDropdown = (id) => {
     setActiveDropdown(activeDropdown === id ? null : id);
   };
-
-  // Close dropdown if clicked outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (!event.target.closest(".dropdown")) {
-        setActiveDropdown(null);
-      }
-    };
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
-  }, []);
 
   const handleViewDetails = (client) => {
     setSelectedClient({
@@ -96,72 +89,25 @@ const Client = () => {
       shipping_address: client.shipping_address || "",
       note: client.note || "",
       company_logo: client.company_logo || null
-    }); // Removed created_at field
+    });
     setIsDetailsPopupOpen(true);
   };
 
-  const handleEditDetails = async () => {
-    try {
-      const response = await axios.put(
-        `http://localhost:5000/api/clients/${selectedClient.id}`,
-        selectedClient,
-        { headers: { "Content-Type": "application/json" } }
-      );
-      alert(response.data.message);
-      setClients(clients.map((client) => (client.id === selectedClient.id ? response.data.client : client)));
-      setFilteredClients(filteredClients.map((client) => (client.id === selectedClient.id ? response.data.client : client)));
-      setIsDetailsPopupOpen(false);
-
-      // Notify backend about the edit
-      await axios.post("http://localhost:5000/api/notifications", {
-        title: "Client Edited",
-        message: `Client ${selectedClient.name} has been updated.`,
-        time: new Date().toLocaleString(),
-      });
-    } catch (error) {
-      console.error("Error updating client:", error.response || error);
-      alert(error.response?.data?.error || "Failed to update client. Please try again.");
-    }
+  const handleEditDetails = () => {
+    setClients(clients.map((client) => (client.id === selectedClient.id ? selectedClient : client)));
+    setFilteredClients(filteredClients.map((client) => (client.id === selectedClient.id ? selectedClient : client)));
+    setIsDetailsPopupOpen(false);
+    alert("Client details updated successfully.");
   };
 
-  const handleRemoveClient = async (clientId) => {
-    try {
-      await axios.delete(`http://localhost:5000/api/clients/${clientId}`);
-      setClients(clients.filter((client) => client.id !== clientId));
-      setFilteredClients(filteredClients.filter((client) => client.id !== clientId));
-      alert("Client removed successfully.");
-
-      // Notify backend about the removal
-      await axios.post("http://localhost:5000/api/notifications", {
-        title: "Client Removed",
-        message: `A client has been removed.`,
-        time: new Date().toLocaleString(),
-      });
-    } catch (error) {
-      console.error("Error removing client:", error);
-      alert("Failed to remove client. Please try again.");
-    }
+  const handleRemoveClient = (clientId) => {
+    setClients(clients.filter((client) => client.id !== clientId));
+    setFilteredClients(filteredClients.filter((client) => client.id !== clientId));
+    alert("Client removed successfully.");
   };
 
-  const handleExportClients = async () => {
-    try {
-      const response = await axios.get("http://localhost:5000/api/clients/export", {
-        responseType: "blob",
-      });
-
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "clients_export.pdf");
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-
-      alert("PDF exported and downloaded successfully.");
-    } catch (error) {
-      console.error("Error exporting clients:", error);
-      alert("Failed to export clients. Please try again.");
-    }
+  const handleExportClients = () => {
+    alert("Export functionality is not implemented in mock mode.");
   };
 
   const renderFilterOption = (label, options) => (
@@ -441,9 +387,6 @@ const Client = () => {
   };
 
   const renderTable = () => {
-    console.log("Filtered Clients:", filteredClients);
-    if (loading) return <p>Loading clients...</p>;
-    if (error) return <p className="text-danger">{error}</p>;
     if (filteredClients.length === 0) return <p>No clients found.</p>;
 
     return (
@@ -455,7 +398,7 @@ const Client = () => {
             <th>Phone</th>
             <th>Company Name</th>
             <th>Company Details</th>
-            <th>Action</th> {/* Removed Created column */}
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -544,7 +487,6 @@ const Client = () => {
         isOpen={isPopupOpen}
         onClose={() => {
           setIsPopupOpen(false);
-          fetchClients();
         }}
       />
       {renderDetailsPopup()}

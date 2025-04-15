@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
 import "./Auth.css";
 
 const Signup = ({ setCurrentForm }) => {
@@ -10,23 +9,8 @@ const Signup = ({ setCurrentForm }) => {
   const [error, setError] = useState("");
 
   const handleSignup = async () => {
-    try {
-      const response = await axios.post("http://localhost:5000/auth/signup", {
-        companyName,
-        name,
-        email,
-        password,
-      });
-
-      if (response.data.message) {
-        alert("Signup Successful!");
-        setCurrentForm("login"); // Switch to login form
-      } else {
-        setError(response.data.error || "Signup failed.");
-      }
-    } catch (error) {
-      setError(error.response?.data?.error || "Signup failed. Please try again.");
-    }
+    alert("Signup Successful! This is a frontend-only demo.");
+    setCurrentForm("login"); // Switch to login form
   };
 
   return (

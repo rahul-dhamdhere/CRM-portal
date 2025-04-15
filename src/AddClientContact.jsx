@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
 import "./AddClientContact.css";
 
 const AddClientContact = ({ isOpen, onClose, onAddClient }) => {
@@ -84,49 +83,32 @@ const AddClientContact = ({ isOpen, onClose, onAddClient }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!validateForm()) return;
 
-    const clientData = new FormData();
-    clientData.append("name", formData.clientName);
-    clientData.append("email", formData.email);
-    clientData.append("phone", formData.mobile);
-    clientData.append("companyName", formData.companyName);
-    clientData.append("companyAddress", formData.companyAddress);
-    clientData.append("salutation", formData.salutation);
-    clientData.append("gender", formData.gender);
-    clientData.append("language", formData.language);
-    clientData.append("clientCategory", formData.clientCategory);
-    clientData.append("clientSubCategory", formData.clientSubCategory);
-    clientData.append("loginAllowed", formData.loginAllowed);
-    clientData.append("emailNotifications", formData.emailNotifications);
-    clientData.append("website", formData.website);
-    clientData.append("taxName", formData.taxName);
-    clientData.append("gstNumber", formData.gstNumber);
-    clientData.append("officePhoneNumber", formData.officePhoneNumber);
-    clientData.append("city", formData.city);
-    clientData.append("state", formData.state);
-    clientData.append("postalCode", formData.postalCode);
-    clientData.append("addedBy", formData.addedBy);
-    clientData.append("shippingAddress", formData.shippingAddress);
-    clientData.append("note", formData.note);
-    if (formData.profilePicture) clientData.append("profilePicture", formData.profilePicture);
-    if (formData.companyLogo) clientData.append("companyLogo", formData.companyLogo);
+    // Create a new client row
+    const clientRow = document.createElement("tr");
+    clientRow.innerHTML = `
+      <td>${formData.clientName || "N/A"}</td>
+      <td>${formData.email || "N/A"}</td>
+      <td>${formData.mobile || "N/A"}</td>
+      <td>${formData.companyName || "N/A"}</td>
+      <td>${formData.companyAddress || "N/A"}</td>
+      <td>
+        <div class="dropdown">
+          <button class="btn btn-light">⋮</button>
+        </div>
+      </td>
+    `;
 
-    try {
-        const response = await axios.post("http://localhost:5000/api/clients", clientData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-        });
-        alert(response.data.message);
-        onAddClient(response.data.client); // Notify parent component about the new client
-        onClose(); // Close the popup
-    } catch (error) {
-        console.error("Error saving client:", error.response || error);
-        alert(error.response?.data?.error || "Failed to save client.");
+    // Append the new client row to the table
+    const clientTableBody = document.querySelector(".table tbody");
+    if (clientTableBody) {
+      clientTableBody.appendChild(clientRow);
     }
-};
+
+    alert("Client added successfully!");
+    onClose();
+  };
 
   return (
     <div className="form-container show">
