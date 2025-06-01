@@ -76,7 +76,8 @@ function UpperNav() {
           />
           {dropdownOpen && (
             <div className="dropdown-menu">
-              <p onClick={() => navigate('/Settings')}>Profile</p>
+              <p onClick={() => navigate('/dashboard')}>Dashboard</p>
+              <p onClick={() => navigate('/settings')}>Profile</p>
               <p onClick={() => navigate('/auth')}>Logout</p>
             </div>
           )}

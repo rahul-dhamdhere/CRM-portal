@@ -398,7 +398,7 @@ const Client = () => {
             <th>Phone</th>
             <th>Company Name</th>
             <th>Company Details</th>
-            <th>Action</th>
+            {/* <th>Action</th> */}
           </tr>
         </thead>
         <tbody>
@@ -409,7 +409,7 @@ const Client = () => {
               <td>{client.phone || "N/A"}</td>
               <td>{client.company_name || "N/A"}</td>
               <td>{client.company_address || "N/A"}</td>
-              <td>
+              {/* <td>
                 <div className="dropdown">
                   <button className="btn btn-light" onClick={() => toggleDropdown(client.id)}>
                     <FaEllipsisV />
@@ -434,7 +434,7 @@ const Client = () => {
                     </ul>
                   )}
                 </div>
-              </td>
+              </td> */}
             </tr>
           ))}
         </tbody>

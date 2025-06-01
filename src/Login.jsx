@@ -11,7 +11,7 @@ const Login = () => {
   const handleLogin = async () => {
     if (email === "test@example.com" && password === "password") {
       alert("Login Successful! This is a frontend-only demo.");
-      navigate("/"); // Redirect to the dashboard
+      navigate("/settings"); // Redirect to settings after login
     } else {
       setError("Invalid credentials. Please try again.");
     }

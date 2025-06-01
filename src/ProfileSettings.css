@@ -104,6 +104,22 @@
   background-color: #0056b3;
 }
 
+/* Center header and profile picture */
+.center-header {
+  justify-content: center !important;
+  text-align: center;
+}
+
+.center-header h2 {
+  width: 100%;
+}
+
+.center-picture {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {
   .profile-settings-container {

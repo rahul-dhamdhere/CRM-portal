@@ -57,7 +57,7 @@ const Lead = () => {
             <th>Lead Owner</th>
             <th>Added By</th>
             <th>Created</th>
-            <th>Action</th>
+            {/* <th>Action</th> */}
           </tr>
         </thead>
         <tbody>
@@ -67,7 +67,7 @@ const Lead = () => {
               <td>{lead.owner}</td>
               <td>{lead.addedBy}</td>
               <td>{lead.created}</td>
-              <td>
+              {/* <td>
                 <div className="dropdown">
                   <button className="btn btn-light" onClick={() => toggleDropdown(lead.id)}>
                     <FaEllipsisV />
@@ -92,7 +92,7 @@ const Lead = () => {
                     </ul>
                   )}
                 </div>
-              </td>
+              </td> */}
             </tr>
           ))}
         </tbody>

@@ -24,20 +24,21 @@ const ProfileSettings = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Profile data submitted:', profileData);
+    alert('Details saved successfully');
   };
 
   return (
     <div className="profile-settings-container">
-      <aside className="sidebar">
+      {/* <aside className="sidebar"> */}
         {/* // page change */}
-        <h2>Profile Settings</h2>
-        <ul>
+        {/* <h2>Profile Settings</h2> */}
+        {/* <ul>
           <li><a href="#">Profile Settings</a></li>
           <li><a href="#">Security Settings</a></li>
-        </ul>
-      </aside>
+        </ul> */}
+      {/* </aside> */}
       <main className="content">
-        <div className="profile-header">
+        <div className="profile-header center-header">
           <h2>Profile Settings</h2>
           {/* <div className="search-box">
             <input type="search" placeholder="Search" />
@@ -45,7 +46,7 @@ const ProfileSettings = () => {
         </div>
 
         <form onSubmit={handleSubmit}>
-          <div className="profile-picture">
+          <div className="profile-picture center-picture">
             {/* Replace with your image upload component */}
             <img src={pic} alt="Profile Picture" />
           </div>

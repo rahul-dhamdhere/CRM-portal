@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Add this import
 import "./Auth.css";
 
 const Signup = ({ setCurrentForm }) => {
@@ -7,10 +8,11 @@ const Signup = ({ setCurrentForm }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate(); // Add this line
 
   const handleSignup = async () => {
     alert("Signup Successful! This is a frontend-only demo.");
-    setCurrentForm("login"); // Switch to login form
+    navigate("/dashboard"); // Redirect to dashboard after signup
   };
 
   return (

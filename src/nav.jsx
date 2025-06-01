@@ -15,7 +15,7 @@ function Nav() {
   return (
    
     <div id="block1" className={collapsed ? 'collapsed' : ''}>
-      <Link id="blocks" to="/">
+      <Link id="blocks" to="/dashboard">
         <img id="image" src={home} alt="home" />
         <h3>Dashboard</h3>
       </Link>

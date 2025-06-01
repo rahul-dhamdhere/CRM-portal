@@ -14,17 +14,11 @@ function App() {
   return (
     <Router>
       <Routes>
-      
-     
+        {/* Redirect root to /auth */}
+        <Route path="/" element={<Navigate to="/auth" />} />
         <Route path="/auth/*" element={<Auth />} />
-
+        {/* All other routes use the main layout */}
         <Route path="/*" element={<MainApp />} />
-        
-        <Route path="*" element={<Navigate to="/auth" />} />
-        <Route path="*" element={<Navigate to="/auth" />} />
-       
-        
-      
       </Routes>
     </Router>
   );
@@ -45,10 +39,13 @@ const MainApp = () => (
     }}>
       <Nav />
       <Routes>
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/" element={<Navigate to="/settings" />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/lead" element={<Lead />} />
         <Route path="/clients" element={<Client />} />
         <Route path="/settings" element={<Setting />} />
+        {/* Fallback: redirect to settings */}
+        <Route path="*" element={<Navigate to="/settings" />} />
       </Routes>
     </div>
   </div>
