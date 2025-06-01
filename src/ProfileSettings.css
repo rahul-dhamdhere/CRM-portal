@@ -124,8 +124,8 @@
 @media (max-width: 768px) {
   .profile-settings-container {
     flex-direction: column;
-    height: calc(100vh - 8vh); /* Adjust height to account for UpperNav */
-    overflow-y: auto; /* Ensure scrolling */
+    height: auto;
+    overflow-y: auto;
   }
 
   .profile-settings-container .sidebar {
@@ -154,6 +154,7 @@
   .profile-settings-container .form-group input,
   .profile-settings-container .form-group select {
     padding: 8px;
+    font-size: 14px;
   }
 
   .profile-settings-container button[type="submit"] {
@@ -165,8 +166,8 @@
 @media (max-width: 480px) {
   .profile-settings-container {
     flex-direction: column;
-    height: calc(100vh - 8vh); /* Adjust height to account for UpperNav */
-    overflow-y: auto; /* Ensure scrolling */
+    height: auto;
+    overflow-y: auto;
   }
 
   .profile-settings-container .sidebar {
@@ -193,6 +194,7 @@
   .profile-settings-container .form-group input,
   .profile-settings-container .form-group select {
     padding: 6px;
+    font-size: 12px;
   }
 
   .profile-settings-container button[type="submit"] {

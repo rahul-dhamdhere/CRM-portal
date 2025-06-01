@@ -229,11 +229,24 @@ li {
 
   .table {
     font-size: 14px;
+    overflow-x: auto;
+    display: block;
   }
 
   .pagination-container {
     flex-direction: column;
     gap: 10px;
+  }
+  th, td {
+    padding: 8px;
+  }
+  .filter-panel {
+    width: 90vw;
+    right: -90vw;
+    padding: 10px;
+  }
+  .filter-panel.open {
+    right: 0;
   }
 }
 
@@ -249,10 +262,23 @@ li {
 
   .table {
     font-size: 12px;
+    overflow-x: auto;
+    display: block;
   }
 
   .pagination-container {
     flex-direction: column;
     gap: 5px;
+  }
+  th, td {
+    padding: 5px;
+  }
+  .filter-panel {
+    width: 98vw;
+    right: -98vw;
+    padding: 5px;
+  }
+  .filter-panel.open {
+    right: 0;
   }
 }

@@ -72,13 +72,13 @@ function Dashboard() {
           </div>
         </div>
       </div>
-      <div style={{display : 'flex', justifyContent: 'space-between'}}>
+      <div className="charts-vertical-stack">
         {/* Leads Graph */}
-        <div className="youtube-style-graph" style={{ width: '35%', height: '225px', margin: '5%' }}>
+        <div className="youtube-style-graph">
           <LineGraph data={leadsData} options={leadsOptions} />
         </div>
         {/* Clients Graph */}
-        <div className="youtube-style-graph" style={{ width: '35%', height: '225px', margin: '5%' }}>
+        <div className="youtube-style-graph">
           <LineGraph data={clientsData} options={clientsOptions} />
         </div>
       </div>
