@@ -28,14 +28,7 @@ const ProfileSettings = () => {
 
   return (
     <div className="profile-settings-container">
-      <aside className="sidebar">
-        {/* // page change */}
-        <h2>Profile Settings</h2>
-        <ul>
-          <li><a href="#">Profile Settings</a></li>
-          <li><a href="#">Security Settings</a></li>
-        </ul>
-      </aside>
+      
       <main className="content">
         <div className="profile-header">
           <h2>Profile Settings</h2>

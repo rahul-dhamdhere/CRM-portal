@@ -35,7 +35,7 @@
 
 .profile-settings-container .profile-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin-bottom: 20px;
   color: white;
@@ -56,13 +56,14 @@
 }
 
 .profile-settings-container .profile-picture {
+  text-align: center;
   margin-bottom: 20px;
 }
 
 .profile-settings-container .profile-picture img {
   max-width: 150px; /* Adjust as needed */
   height: auto;
-  border-radius: 50%; /* Make it circular */
+ border-radius: 50%; /* Make it circular */
 }
 
 .profile-settings-container .form-group {

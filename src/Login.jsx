@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "./Auth.css";
 
-const Login = () => {
+const Login = ({ setCurrentForm }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -16,7 +16,8 @@ const Login = () => {
         password,
       });
 
-      if (response.data.message) {
+      if (response.data.message && response.data.token) {
+        localStorage.setItem('authToken', response.data.token); // Save token
         alert("Login Successful!");
         navigate("/"); // Redirect to the dashboard
       } else {
