@@ -4,7 +4,7 @@ import Signup from "./Signup.jsx";
 import "./Auth.css";
 
 const Auth = () => {
-  const [currentForm, setCurrentForm] = useState("login");
+  const [currentForm, setCurrentForm] = useState("signup");
 
   return (
     <div className="c1">
